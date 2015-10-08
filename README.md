@@ -1,3 +1,3 @@
 # neunet-basics
 
-basic knowledge on neural networks in a few python notebooks
+## Getting started with neural networks in python
