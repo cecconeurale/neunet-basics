@@ -1,2 +1,3 @@
 # neunet-basics
-Basick knowledge on neural networks in python
+
+The basic knowledge on neural networks in a few python notebooks
