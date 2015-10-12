@@ -6,10 +6,10 @@
 .input_area pre { font-size:12px; line-height:120% }
 
 /* FONT_TEXT */
-div.text_cell_render, div.text_cell_render span { text-align: justify; font-size:22px;  line-height:120% }
+div.text_cell_render { font-size:18px;  line-height:120% }
 
 /* FONT_QUOTE */
-div.text_cell_render pre { font-size:16px; line-height:120% }
+.text_cell_render pre { font-size:16px; line-height:120% }
 
 /* BACKGROUND */
 div .input_area { background-color:#000000;}
@@ -98,7 +98,7 @@ div .input_area { background-color:#000000;}
 /* JUPYTER */
 
 /* FONT_EDIT */
-.cm-s-default span { font-size:22px; line-height:120% }
+.cm-s-default span { font-size:20px; line-height:120% }
 
 /* BACKGROUND_EDIT */
 div .cm-s-default { background-color: #888888;}
@@ -140,18 +140,3 @@ div .cm-s-default { background-color: #888888;}
 .input_area .cm-s-ipython span.cm-string-2 { color: #FFA0A0 } 
 
 </style>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
-    jax: ["input/TeX", "output/SVG"],
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
-      processEscapes: true
-    },
-    "SVG": { availableFonts: ["TeX"] }
-  });
-</script>
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-<script type="text/javascript" src="path-to-MathJax/MathJax.js">
-</script>
