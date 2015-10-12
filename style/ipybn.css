@@ -2,24 +2,14 @@
 
 /* PRINT */
 
-/* EVIDENCE */
-div.evidence { color: #FFFFFF; }
-
-/* FONT_SIZE_EVIDENCE */
-div.evidence { font-size: 18px;} 
-
-/* BACKGROUND_EVIDENCE */
-div.evidence { background: #000000; }
-
-
 /* FONT_CODE */
 .input_area pre { font-size:12px; line-height:120% }
 
 /* FONT_TEXT */
-div.text_cell_render { font-size:18px; }
+div.text_cell_render { font-family: Verdana; text-align: justify; font-size:22px;  line-height:120% }
 
 /* FONT_QUOTE */
-.text_cell_render pre { font-size:12px; line-height:120% }
+.text_cell_render pre { font-size:16px; line-height:120% }
 
 /* BACKGROUND */
 div .input_area { background-color:#000000;}
@@ -108,7 +98,7 @@ div .input_area { background-color:#000000;}
 /* JUPYTER */
 
 /* FONT_EDIT */
-.cm-s-default span { font-size:18px; line-height:120% }
+.cm-s-default span { font-size:22px; line-height:120% }
 
 /* BACKGROUND_EDIT */
 div .cm-s-default { background-color: #888888;}
@@ -150,3 +140,4 @@ div .cm-s-default { background-color: #888888;}
 .input_area .cm-s-ipython span.cm-string-2 { color: #FFA0A0 } 
 
 </style>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>

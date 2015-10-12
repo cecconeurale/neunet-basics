@@ -2,21 +2,11 @@
 
 /* PRINT */
 
-/* EVIDENCE */
-div.evidence { color: __EVIDENCE__; }
-
-/* FONT_SIZE_EVIDENCE */
-div.evidence { font-size: __FONT_SIZE_EVIDENCE__;} 
-
-/* BACKGROUND_EVIDENCE */
-div.evidence { background: __BACKGROUND_EVIDENCE__; }
-
-
 /* FONT_CODE */
 .input_area pre { font-size:__FONT_SIZE_CODE__; line-height:120% }
 
 /* FONT_TEXT */
-div.text_cell_render { font-size:__FONT_SIZE_TEXT__; }
+div.text_cell_render { font-size:__FONT_SIZE_TEXT__;  line-height:120% }
 
 /* FONT_QUOTE */
 .text_cell_render pre { font-size:__FONT_SIZE_QUOTE__; line-height:120% }
