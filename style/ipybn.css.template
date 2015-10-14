@@ -13,6 +13,7 @@ div.text_cell_render { font-size:__FONT_SIZE_TEXT__;  line-height:120% }
 
 /* BACKGROUND */
 div .input_area { background-color:__BACKGROUND__;}
+blockquote { background-color: __QUOTE__; }
 
 /* BUILTIN */
 .input_area .highlight .bp { color: __BUILTIN__ } /* Name.Builtin.Pseudo */
