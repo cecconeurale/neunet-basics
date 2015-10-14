@@ -2,8 +2,8 @@
 /* PRINT */
 
 div.MathJax_Display {padding: 40px}
-div.input_area  { padding:20px; }
-div.input_area>div.highlight  { padding:20px; }
+div.input_area  { padding:10px; }
+div.input_area>div.highlight  { padding:10px; }
 
 /* FONT_CODE */
 .input_area pre { font-size:12px; }
