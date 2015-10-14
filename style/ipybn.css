@@ -3,13 +3,13 @@
 /* PRINT */
 
 /* FONT_CODE */
-div.input_area pre { font-size:12px; line-height:120% }
+div.input_area pre { font-size:12px }
 
 /* FONT_TEXT */
-div.text_cell_render { font-size:18px;  line-height:120% }
+div.text_cell_render { font-size:18px }
 
 /* FONT_QUOTE */
-div.text_cell_render pre { font-size:16px; line-height:120% }
+div.text_cell_render pre { font-size:16px }
 
 /* BACKGROUND */
 div.input_area { background-color:#000000;}
