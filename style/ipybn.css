@@ -1,6 +1,8 @@
 <style>
 /* PRINT */
 
+div.MathJax_Display {padding: 40px}
+
 /* FONT_CODE */
 .input_area pre { font-size:12px; }
 
@@ -140,3 +142,6 @@ div .cm-s-default { background-color: #888888;}
 .input_area .cm-s-ipython span.cm-string-2 { color: #FFA0A0 } 
 
 </style>
+
+
+
