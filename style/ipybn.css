@@ -3,16 +3,17 @@
 
 div.MathJax_Display {padding: 40px}
 div.input_area  { padding:10px; }
+.rendered_html p{ text-align: left }
 div.input_area>div.highlight  { padding:10px; }
 
 /* FONT_CODE */
 .input_area pre { font-size:12px; }
 
 /* FONT_TEXT */
-div.text_cell_render { font-size:28px; text-align: left }
+div.text_cell_render { font-size:24px; text-align: left; line-height: 140% }
 
 /* FONT_QUOTE */
-div.text_cell_render pre { font-size:14px; }
+div.text_cell_render pre { font-size:14px; line-height: 120% }
 
 /* BACKGROUND */
 div .input_area { background-color:#333333;}
@@ -102,10 +103,10 @@ blockquote { background-color: #FFFF66; }
 /* JUPYTER */
 
 /* FONT_EDIT */
-.cm-s-default span { font-size:16px; line-height:120% }
+.cm-s-default span { font-size:24px; line-height:120% }
 
 /* BACKGROUND_EDIT */
-div .cm-s-default { background-color: #888888;}
+div .cm-s-default { background-color: #dddddd;}
 
 /* CURSOR */
 .input_area .CodeMirror div.CodeMirror-cursor { border-left: 5px solid #FFFFFF; }
