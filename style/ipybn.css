@@ -1,7 +1,12 @@
 <style>
 /* PRINT */
+div.text_cell_render table, 
+div.text_cell_render  tr,
+div.text_cell_render td {
+    border: 0px solid black;
+}
+div.MathJax_Display {padding: 40px 5px 40px 5px}
 
-div.MathJax_Display {padding: 40px}
 div.input_area  { padding:10px; }
 .rendered_html p{ text-align: left }
 div.input_area>div.highlight  { padding:10px; }
