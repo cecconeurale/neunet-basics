@@ -7,7 +7,7 @@ div.input_area  { padding:10px; }
 div.input_area>div.highlight  { padding:10px; }
 
 /* FONT_CODE */
-.input_area pre { font-size:12px; }
+.input_area pre { font-size:10px; line-height: 120% }
 
 /* FONT_TEXT */
 div.text_cell_render { font-size:24px; text-align: left; line-height: 140% }
