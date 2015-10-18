@@ -44,7 +44,7 @@ function createTOC(){
 	    if (this.id==''){this.id = this.innerHTML.replace(/ /g,"-")}
 	    var anchor = this.id;
         
-	    toc += '<li><a href="#' + anchor + '">' +  romanize(levels[openLevel].toString()) + '. ' + titleText
+	    toc += '<li><a href="#' + anchor + '">' +  (levels[openLevel].toString()) + '. ' + titleText
 		+ '</a></li>';
         
 	});
