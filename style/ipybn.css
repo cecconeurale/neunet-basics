@@ -1,6 +1,14 @@
 <style>
 
-#toc {font-size: 14px; line-height: 120%}
+/* PRINT */
+
+#toc ol {
+    font-size: 12px; 
+    line-height: 120%; 
+    padding: 0; 
+    margin-left: 12px; 
+    list-style-type: decimal;
+}
 
 /* PRINT */
 div.text_cell_render table, 
@@ -10,22 +18,22 @@ div.text_cell_render td {
 }
 div.MathJax_Display {padding: 40px 5px 40px 5px}
 
-div.input_area  { padding:10px; }
+div.input_area  { padding: 10px; }
 .rendered_html p{ text-align: left }
-div.input_area>div.highlight  { padding:10px; }
+div.input_area>div.highlight  { padding:10px; overflow-x: hidden }
 
 /* FONT_CODE */
-.input_area pre { font-size:10px; line-height: 120% }
+.input_area pre { font-size:12px; line-height:120%; }
 
 /* FONT_TEXT */
-div.text_cell_render { font-size:24px; text-align: left; line-height: 140% }
+div.text_cell_render { font-size:16px;  line-height:120% }
 
 /* FONT_QUOTE */
-div.text_cell_render pre { font-size:14px; line-height: 120% }
+.text_cell_render pre { font-size:14px; line-height:120% }
 
 /* BACKGROUND */
 div .input_area { background-color:#333333;}
-blockquote { background-color: #FFFF66; }
+blockquote { background-color:#ffff66; }
 
 /* BUILTIN */
 .input_area .highlight .bp { color: #CD5C5C } /* Name.Builtin.Pseudo */
@@ -111,10 +119,10 @@ blockquote { background-color: #FFFF66; }
 /* JUPYTER */
 
 /* FONT_EDIT */
-.cm-s-default span { font-size:24px; line-height:120% }
+.cm-s-default span { font-size:16px; line-height:120% }
 
 /* BACKGROUND_EDIT */
-div .cm-s-default { background-color: #dddddd;}
+div .cm-s-default { background-color: #888888;}
 
 /* CURSOR */
 .input_area .CodeMirror div.CodeMirror-cursor { border-left: 5px solid #FFFFFF; }
@@ -152,8 +160,7 @@ div .cm-s-default { background-color: #dddddd;}
 .input_area .cm-s-ipython span.cm-string { color: #FFA0A0 } 
 .input_area .cm-s-ipython span.cm-string-2 { color: #FFA0A0 } 
 
-</style>
-<script> 
+</style><script> 
 // Converts integer to roman numeral
 function romanize(num) {
     var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1},
@@ -180,6 +187,8 @@ function createTOC(){
 
         titleText = this.innerHTML;
         openLevel = this.tagName[1];
+        if(openLevel>1) {
+            openLevel-=1
 
         if (levels[openLevel]){
             levels[openLevel] += 1;
@@ -188,9 +197,9 @@ function createTOC(){
         }
 
         if (openLevel > level) {
-            toc += (new Array(openLevel - level + 1)).join('<ul class="toc">');
+            toc += (new Array(openLevel - level + 1)).join('<ol type="1" class="toc">');
         } else if (openLevel < level) {
-            toc += (new Array(level - openLevel + 1)).join("</ul>");
+            toc += (new Array(level - openLevel + 1)).join("</ol>");
             for (i=level;i>openLevel;i--){levels[i]=0;}
         }
 
@@ -200,14 +209,15 @@ function createTOC(){
         if (this.id==''){this.id = this.innerHTML.replace(/ /g,"-")}
         var anchor = this.id;
 
-        toc += '<li><a href="#' + anchor + '">' +  (levels[openLevel].toString()) + '. ' + titleText
+        toc += '<li><a href="#' + anchor + '">' + titleText
         + '</a></li>';
+    }
 
     });
 
 
     if (level) {
-        toc += (new Array(level + 1)).join("</ul>");
+        toc += (new Array(level + 1)).join("</ol>");
     }
 
 
@@ -221,6 +231,4 @@ setTimeout(function(){createTOC();},100);
 // Rebuild to TOC every minute
 setInterval(function(){createTOC();},60000);
 </script>
-
-
 
