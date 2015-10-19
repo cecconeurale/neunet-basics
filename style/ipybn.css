@@ -3,10 +3,10 @@
 /* PRINT */
 
 #toc ol {
-    font-size: 10px; 
+    font-size: 16px; 
     line-height: 120%; 
     padding: 0; 
-    margin-left: 10px; 
+    margin-left: 16px; 
     list-style-type: decimal;
 }
 
@@ -18,19 +18,18 @@ div.text_cell_render td {
 }
 div.MathJax_Display {padding: 40px 5px 40px 5px}
 
-div.input_area span {white-space: nowrap;}
-div.input_area  { padding: 10px; overflow-x: scroll }
+div.input_area  { padding: 10px;  }
 .rendered_html p{ text-align: left }
 div.input_area>div.highlight  { padding:10px; }
 
 /* FONT_CODE */
-.input_area pre { font-size:10px; line-height:120% }
+.input_area pre { font-size:12px; line-height:120% }
 
 /* FONT_TEXT */
 div.text_cell_render { font-size:16px;  line-height:120% }
 
 /* FONT_QUOTE */
-.text_cell_render pre { font-size:14px; line-height:120% }
+.text_cell_render pre { font-size:12px; line-height:120% }
 
 /* BACKGROUND */
 div .input_area { background-color:#333333;}
