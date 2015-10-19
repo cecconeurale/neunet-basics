@@ -16,8 +16,8 @@
    inkscape:version="0.48.5 r10040"
    sodipodi:docname="perceptron.svg"
    inkscape:export-filename="/home/francescomannella/Dropbox/Projects/neunet-basics/course/perceptron.png"
-   inkscape:export-xdpi="124.24996"
-   inkscape:export-ydpi="124.24996">
+   inkscape:export-xdpi="82.819214"
+   inkscape:export-ydpi="82.819214">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -324,7 +324,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
