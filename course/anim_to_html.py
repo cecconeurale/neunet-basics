@@ -8,7 +8,7 @@ IMG_TAG = '<img src = "data:image/png;base64,{0}"/>'
 def anim_to_html(anim):
     if not hasattr(anim, '_encoded_gif'):
         with NamedTemporaryFile(suffix='.gif') as f:
-            anim.save(f.name, fps = 30, writer='imagemagick')
+            anim.save(f.name, fps = 10, writer='imagemagick')
             gif = open(f.name, "rb").read()
         anim._encoded_gif =  gif.encode("base64")
     
