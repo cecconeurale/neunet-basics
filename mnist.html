@@ -186,7 +186,36 @@ div#notebook {
 <p>The MNIST database of handwritten digits, available at <a href="http://yann.lecun.com/exdb/mnist">Yann Lecun web site</a>, has a training set of 60,000 examples, and a test set of 10,000 examples. It is a subset of a larger set available from NIST.</p>
 <p>The digits have been size-normalized and centered in a fixed-size image.
 It is a good database for people who want to try learning techniques and pattern recognition methods on real-world data while spending minimal efforts on preprocessing and formatting.</p>
-<p>To obtain and use it in python just install <a href="https://github.com/sorki/python-mnist">python-mnist</a>:</p>
+<h3 id="MNIST-numbers">MNIST numbers<a class="anchor-link" href="#MNIST-numbers">&#182;</a></h3><table>
+<thead><tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>training images:</td>
+<td>60000</td>
+</tr>
+<tr>
+<td>test images:</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>image pixels:</td>
+<td>28x28</td>
+</tr>
+<tr>
+<td>format:</td>
+<td>raw vector of 784 elements</td>
+</tr>
+<tr>
+<td></td>
+<td>encoding 0-255</td>
+</tr>
+</tbody>
+</table>
+<h3 id="MNIST-with-pyhton">MNIST with pyhton<a class="anchor-link" href="#MNIST-with-pyhton">&#182;</a></h3><p>To obtain and use it in python just install <a href="https://github.com/sorki/python-mnist">python-mnist</a>:</p>
 
 <pre><code>sudo pip install python_mnist</code></pre>
 <p>Then download the files of the dataset in a folder called data by running these few lines:</p>
@@ -520,7 +549,7 @@ Next cell is just for styling</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
@@ -538,7 +567,7 @@ Next cell is just for styling</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[8]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[1]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <style>
@@ -555,6 +584,7 @@ Next cell is just for styling</p>
 
 /* PRINT */
 div.text_cell_render table, 
+div.text_cell_render  th,
 div.text_cell_render  tr,
 div.text_cell_render td {
     border: 0px solid black;
