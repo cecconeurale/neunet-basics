@@ -12,6 +12,7 @@
 
 /* PRINT */
 div.text_cell_render table, 
+div.text_cell_render  th,
 div.text_cell_render  tr,
 div.text_cell_render td {
     border: 0px solid black;
