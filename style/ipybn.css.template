@@ -20,6 +20,17 @@ div.text_cell_render td {
 div.MathJax_Display {padding: 40px 5px 40px 5px}
 
 div.input_area  { padding: 10px;  }
+
+div.input_area  { 
+    min-width: 20em !important; 
+    overflow-x: hide
+} 
+div.input_area pre {  
+    min-width: 20em !important; 
+}
+
+
+div.input_area  { padding: 10px;  }
 .rendered_html p{ text-align: left }
 div.input_area>div.highlight  { padding:10px; }
 

@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import urllib
 import base64
 
+IMG_TAG_INLINE = '<img src = "{0}"/>'
 IMG_TAG = '<img src = "data:image/png;base64,{0}"/>'
 
 def anim_to_html(anim, filename = None):
@@ -13,9 +14,7 @@ def anim_to_html(anim, filename = None):
         gif = open(filename, "rb").read()
         anim._encoded_gif =  gif.encode("base64")
     
-    return IMG_TAG.format(anim._encoded_gif)
-    
-    return IMG_TAG.format(anim._encoded_gif)
+    return IMG_TAG.format(anim._encoded_gif) 
 
 from IPython.display import HTML
 def display_animation(anim, filename = None):
