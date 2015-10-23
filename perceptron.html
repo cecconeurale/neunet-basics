@@ -195,7 +195,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Spreading--of-activations">Spreading  of activations<a class="anchor-link" href="#Spreading--of-activations">&#182;</a></h3><p>At each timestep of the simulation the first layer of units $\mathbf{x}=[x_0,\dots,x_n]$ is filled up with an input vector $\mathbf{p}_k=[p_{k0},\dots,p_{kn}]$. One unit of this layer, the bias, is not included in this update. instead it is permanently set to 1.
+<h3 id="Spreading--of-activations">Spreading  of activations<a class="anchor-link" href="#Spreading--of-activations">&#182;</a></h3><p>At each timestep of the simulation the first layer of units $\mathbf{x}=(x_0,\dots,x_n)$ is filled up with an input vector $\mathbf{p}_k=(p_{k0},\dots,p_{kn})$. One unit of this layer, the bias, is not included in this update. instead it is permanently set to 1.
 Each connection from a unit of the first layer to the output unit has a weight that is initially set to 0. The activation of the output unit is given by the weighted sum of the input units plus the weighted bias:
 $$
 y = \sum_{i=1}^{n+1} w_i x_i + w_0
@@ -207,14 +207,31 @@ In python you can write:</p>
 </pre></div>
 <p>Using linear algebra we can rewrite it in a shorter form as:
 $$
-\mathbf{y} = \mathbf{W}\mathbf{\tilde{x}}
+y = \mathbf{w}\mathbf{\tilde{x}}
 $$
-where $\mathbf{\tilde{x}} = (1, x_0, \dots, x_n)$ and $\mathbf{W}\mathbf{\tilde{x}}$ is is the <a href="https://en.wikipedia.org/wiki/Dot_product#Algebraic_definition">dot product</a>, a linear algebra operator that allows to calculate the  weighted sum at once.
-In python it becomes:</p>
+where $\mathbf{\tilde{x}} = (1, x_0, \dots, x_n)$, $\mathbf{w} = (w_0, \dots, w_{n+1})$ and $\mathbf{w}\mathbf{\tilde{x}}$ is is the <a href="https://en.wikipedia.org/wiki/Dot_product#Algebraic_definition">dot product</a>, a linear algebra operator that allows to calculate the  weighted sum at once.</p>
+<blockquote><p>Given two vectors of the same size $\mathbf{a} \in \mathbb{R}^n$ and $\mathbf{b} \in \mathbb{R}^n$, the dot product $\mathbf{a}\mathbf{b}$ produces a <em>scalar value</em> $p$.</p>
+</blockquote>
+<p>In python it becomes:</p>
 <div class="highlight"><pre><span class="n">tx</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">])</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">tx</span><span class="p">)</span>
 </pre></div>
 <p><em>Using linear algebra in a neural network implementation is far simpler than writing loops, it is less error prone and also produces a much efficient code in terms of speed!!</em></p>
+<p>If the network is composed of more than one output units, the activation of units can be expressed as:
+$$
+y_j = \sum_{ij} w_{(i+1)j} x_i + w_{0j}
+$$
+and it can be written in linear algebra notation as:
+$$
+\mathbf{y} = \mathbf{W}\mathbf{\tilde{x}}
+$$
+where $ \mathbf{y} = (y_0, \dots, y_m)$, $\mathbf{W} \in \mathbb{R}^{m\times n}$  is the matrix of weights from $ \mathbf{x}$ to $ \mathbf{y}$, and $\mathbf{W}\mathbf{\tilde{x}}$ is a multiplication of a matrix  times a vector, that is the <a href="https://en.wikipedia.org/wiki/Matrix_multiplication#Matrix_product_.28two_matrices.29">matrix product</a> of which the dot product is a <a href="https://en.wikipedia.org/wiki/Matrix_multiplication#Row_vector_and_column_vector">special case</a>.</p>
+<blockquote><p>Given two matrices $\mathbf{A} \in \mathbb{R}^{m\times k}$ and $\mathbf{B} \in \mathbb{R}^{k\times n}$, the matrix product $\mathbf{A}\mathbf{B}$ produces a new matrix $\mathbf{P} \in \mathbb{R}^{m\times n}$.</p>
+</blockquote>
+<p>In python nothing changes!:</p>
+<div class="highlight"><pre><span class="n">y</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">tx</span><span class="p">)</span>
+</pre></div>
+<p>where <code>w</code> is now a matrix, and <code>y</code> is a vector.</p>
 
 </div>
 </div>
@@ -237,6 +254,19 @@ $$
 where $\eta$ is a value determining the rate of weight change per timestep (it is typically very little) and $o_k - y$ is the error in reproducing the desired value.
 In python we write:</p>
 <div class="highlight"><pre><span class="n">w</span> <span class="o">+=</span> <span class="n">eta</span><span class="o">*</span><span class="p">(</span><span class="n">o</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">tx</span>
+</pre></div>
+<p>In the case of many output units the learning rule becomes:
+$$
+\Delta w_{ij} = \eta (o_{kj} - y_j)\tilde{x}_i
+$$
+which in linear algebra notation is:</p>
+$$
+\Delta \mathbf{W} = \eta (\mathbf{o}_k - \mathbf{y})\mathbf{\tilde{x}}^T
+$$<p>where $\mathbf{o}_k - \mathbf{y}$ is now a vector, $\mathbf{\tilde{x}}^T$ is the vector $\mathbf{\tilde{x}}$ <em>transposed into a row vector</em>, and $(\mathbf{o}_k - \mathbf{y})\mathbf{\tilde{x}}^T$ is a new form of vector product: the <a href="https://en.wikipedia.org/wiki/Outer_product#Vector_multiplication">outer product</a>.</p>
+<blockquote><p>Given two vectors $\mathbf{a} \in \mathbb{R}^n$ and $\mathbf{b} \in \mathbb{R}^m$, the outer product $\mathbf{a}\mathbf{b}^T$ produces a matrix $\mathbf{M} \in \mathbb{R}^{m\times n}$.</p>
+</blockquote>
+<p>In python we can rewrite it as:</p>
+<div class="highlight"><pre><span class="n">W</span> <span class="o">+=</span> <span class="n">eta</span><span class="o">*</span><span class="n">outer</span><span class="p">((</span><span class="n">o</span> <span class="o">-</span> <span class="n">y</span><span class="p">),</span> <span class="n">tx</span><span class="p">)</span>
 </pre></div>
 
 </div>
