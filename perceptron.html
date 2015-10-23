@@ -245,7 +245,7 @@ where $ \mathbf{y} = (y_0, \dots, y_m)$, $\mathbf{W} \in \mathbb{R}^{m\times n}$
 In perceptrons learning can be done online, meaning that we can update the weights each time a single input pattern is presented.
 Learning is given at each timestep by:
 $$
-\Delta w_i = \eta (o_k - y)\tilde{x}_i
+\Delta w_i = \eta (o_k - y)x_i
 $$
 or, in linear algebra notation:
 $$
@@ -257,12 +257,12 @@ In python we write:</p>
 </pre></div>
 <p>In the case of many output units the learning rule becomes:
 $$
-\Delta w_{ij} = \eta (o_{kj} - y_j)\tilde{x}_i
+\Delta w_{ij} = \eta (o_{kj} - y_j)x_i
 $$
 which in linear algebra notation is:</p>
 $$
-\Delta \mathbf{W} = \eta (\mathbf{o}_k - \mathbf{y})\mathbf{\tilde{x}}^T
-$$<p>where $\mathbf{o}_k - \mathbf{y}$ is now a vector, $\mathbf{\tilde{x}}^T$ is the vector $\mathbf{\tilde{x}}$ <em>transposed into a row vector</em>, and $(\mathbf{o}_k - \mathbf{y})\mathbf{\tilde{x}}^T$ is a new form of vector product: the <a href="https://en.wikipedia.org/wiki/Outer_product#Vector_multiplication">outer product</a>.</p>
+\Delta \mathbf{W} = \eta (\mathbf{o}_k - \mathbf{y})\mathbf{x}^T
+$$<p>where $\mathbf{o}_k - \mathbf{y}$ is now a vector, $\mathbf{x}^T$ is the vector $\mathbf{x}$ <em>transposed into a row vector</em>, and $(\mathbf{o}_k - \mathbf{y})\mathbf{x}^T$ is a new form of vector product: the <a href="https://en.wikipedia.org/wiki/Outer_product#Vector_multiplication">outer product</a>.</p>
 <blockquote><p>Given two vectors $\mathbf{a} \in \mathbb{R}^n$ and $\mathbf{b} \in \mathbb{R}^m$, the outer product $\mathbf{a}\mathbf{b}^T$ produces a matrix $\mathbf{M} \in \mathbb{R}^{m\times n}$.</p>
 </blockquote>
 <p>In python we can rewrite it as:</p>
