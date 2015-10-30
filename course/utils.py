@@ -20,7 +20,7 @@ img_side = 28
 # each input is a raw vector.
 # the number of units of the network 
 # corresponds to the number of input elements
-n = img_side*img_side 
+n_pixels = img_side*img_side 
 
 #-------------------------------------------------------------
 # a custom plot that uses imshow to draw a matrix
@@ -48,6 +48,18 @@ def to_mat(x) :
 #            0 otherwise
 def step(x) :
     return 1.0*(x>0)
+
+#-------------------------------------------------------------
+# sigmoid function
+# t   float temperature
+def sigmoid(x,t=1.0) :
+    return 1.0/(1.0 + exp(-x/t))
+
+#-------------------------------------------------------------
+# RELU: rectifier linear unit function
+# t   float temperature
+def sigmoid(x) :
+    return maximum(0,x)
 
 #-------------------------------------------------------------
 # Create an array with 2-dimensional patterns belonging to two categories
