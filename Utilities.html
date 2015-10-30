@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>mnist</title>
+<title>Utilities</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -174,88 +174,15 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="The-MNIST-dataset">The MNIST dataset<a class="anchor-link" href="#The-MNIST-dataset">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The MNIST database of handwritten digits, available at <a href="http://yann.lecun.com/exdb/mnist">Yann Lecun web site</a>, has a training set of 60,000 examples, and a test set of 10,000 examples. It is a subset of a larger set available from NIST.</p>
-<p>The digits have been size-normalized and centered in a fixed-size image.
-It is a good database for people who want to try learning techniques and pattern recognition methods on real-world data while spending minimal efforts on preprocessing and formatting.</p>
-<h3 id="MNIST-numbers">MNIST numbers<a class="anchor-link" href="#MNIST-numbers">&#182;</a></h3><table>
-<thead><tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>training images:</strong></td>
-<td>60000</td>
-</tr>
-<tr>
-<td><strong>test images:</strong></td>
-<td>10000</td>
-</tr>
-<tr>
-<td><strong>image pixels:</strong></td>
-<td>28x28</td>
-</tr>
-<tr>
-<td><strong>image format:</strong></td>
-<td>raw vector of 784 elements</td>
-</tr>
-<tr>
-<td></td>
-<td>encoding 0-255</td>
-</tr>
-</tbody>
-</table>
-<h3 id="MNIST-with-pyhton">MNIST with pyhton<a class="anchor-link" href="#MNIST-with-pyhton">&#182;</a></h3><p>To obtain and use it in python just install <a href="https://github.com/sorki/python-mnist">python-mnist</a>:</p>
-
-<pre><code>sudo pip install python_mnist</code></pre>
-<p>Then download the files of the dataset in a folder called data by running these few lines:</p>
+<h3 id="Utilities">Utilities<a class="anchor-link" href="#Utilities">&#182;</a></h3><p>The file <code>utils.py</code> contains nsome usefull stuff which is used throughout all notebooks in this site.</p>
+<p>First of all it includes the initialization of all constants and variables for the use of MNIST database:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c"># Download bash script </span>
-<span class="o">!</span> wget https://raw.githubusercontent.com/sorki/python-mnist/master/get_data.sh &gt; /dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
-    
-<span class="c"># Run it to create the &#39;data&#39; folder and fill it with the dataset files</span>
-<span class="o">!</span> bash get_data.sh &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
-
-<span class="c"># Remove the script file</span>
-<span class="o">!</span> rm get_data.sh* &gt; /dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we can get the data in a readable way by using the load_training and load_testing methods of the MNIST object:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="c"># import the mnist class</span>
@@ -287,7 +214,112 @@ It is a good database for people who want to try learning techniques and pattern
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Below, as an example, we take the first ten samples from the training set and plot them:</p>
+<p>Then you find a function to plot mnist images in a row of subplots:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="c"># Set the maximum number of plots to be printed in a row</span>
+<span class="n">windows</span> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="c"># A custom plot that uses imshow to draw a matrix</span>
+<span class="c"># x      :  array           The matrix to be plotted</span>
+<span class="c"># fig    :  figure object   Figure device to use</span>
+<span class="c"># window :  int             The current subplot position</span>
+<span class="c"># windows:  int             Number of subplot</span>
+<span class="k">def</span> <span class="nf">plot_img</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">windows</span> <span class="o">=</span> <span class="n">windows</span><span class="p">)</span> <span class="p">:</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">windows</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">interpolation</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> 
+              <span class="n">aspect</span> <span class="o">=</span> <span class="s">&#39;auto&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">Greys</span><span class="p">)</span>  
+    <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>and a function to reshape raw mnist data as squared matrices:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="c">#-------------------------------------------------------------</span>
+<span class="c"># transform a raw input in an image matrix  </span>
+<span class="c"># x:      array    the raw input vector</span>
+<span class="c"># return  array    a squared matrix</span>
+<span class="k">def</span> <span class="nf">to_mat</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">:</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span> <span class="n">img_side</span><span class="p">,</span> <span class="n">img_side</span> <span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Finally you have some general use functions.</p>
+<p>A list of transfer functions:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="c">#-------------------------------------------------------------</span>
+<span class="c"># step function</span>
+<span class="c"># return:    1 if x &gt; 0</span>
+<span class="c">#            0 otherwise</span>
+<span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">:</span>
+    <span class="k">return</span> <span class="mf">1.0</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c">#-------------------------------------------------------------</span>
+<span class="c"># sigmoid function</span>
+<span class="c"># t   float temperature</span>
+<span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span> <span class="p">:</span>
+    <span class="k">return</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="n">t</span><span class="p">))</span>
+
+<span class="c">#-------------------------------------------------------------</span>
+<span class="c"># RELU: rectifier linear unit function</span>
+<span class="c"># t   float temperature</span>
+<span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">:</span>
+    <span class="k">return</span> <span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A function to build a dataset of points based on two lists (belonging/not belonging) centroids.</p>
 
 </div>
 </div>
@@ -297,183 +329,56 @@ It is a good database for people who want to try learning techniques and pattern
 <div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="o">%</span><span class="k">matplotlib</span> inline
-<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+<div class=" highlight hl-ipython2"><pre><span class="c">#-------------------------------------------------------------</span>
+<span class="c"># Create an array with 2-dimensional patterns belonging to two categories</span>
+<span class="c"># n_patterns    :        int                 Number of patterns</span>
+<span class="c"># std_deviation :        float               Standard deviation of noise</span>
+<span class="c"># centroids1    :        2-elements-vectors  Points from which the</span>
+<span class="c">#                        list                patterns belonging to </span>
+<span class="c">#                                            the class are generated</span>
+<span class="c"># centroids2    :        2-elements-vectors  Points from which the</span>
+<span class="c">#                        list                patterns not belonging </span>
+<span class="c">#                                            to the class are generated</span>
+<span class="c"># returns       :        array               Each row contains a pattern as</span>
+<span class="c">#                                            its first two elements and</span>
+<span class="c">#                                            the group (belonging/not </span>
+<span class="c">#                                            belonging/) as its third element</span>
+<span class="k">def</span> <span class="nf">build_dataset</span><span class="p">(</span> <span class="n">n_patterns</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> 
+                   <span class="n">std_deviation</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+                   <span class="n">centroids1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.8</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">]</span> <span class="p">],</span> 
+                   <span class="n">centroids2</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span> <span class="p">]</span> <span class="p">]</span> <span class="p">)</span> <span class="p">:</span>
+    
+    <span class="c"># Decide to which group patterns are from.</span>
+    <span class="c"># First half belongs to the class</span>
+    <span class="n">categories</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">n_patterns</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">n_patterns</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>   
+    
+    <span class="c"># Each row of this array will contain a 2-element-wide </span>
+    <span class="c"># input pattern plus an integer defining to which category</span>
+    <span class="c"># the pattern belongs   </span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">([</span><span class="n">n_patterns</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
 
-<span class="c"># Define the number of samples to take</span>
-<span class="n">num_samples</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="c"># Iterate the patterns to generate</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">n_patterns</span><span class="p">)</span> <span class="p">:</span>
+        
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">categories</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">:</span> 
+            <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="n">rand</span><span class="p">()</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">centroids1</span><span class="p">)</span> <span class="p">)</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">centroids1</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="n">rand</span><span class="p">()</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">centroids2</span><span class="p">)</span> <span class="p">)</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">centroids2</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+        
+        <span class="c"># Add noise to each element of the centroid</span>
+        <span class="n">pattern</span> <span class="o">+=</span> <span class="n">std_deviation</span><span class="o">*</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="c"># create a figure where we will store all samples </span>
-<span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-
-<span class="c"># Iterate over samples indices</span>
-<span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">num_samples</span><span class="p">)</span> <span class="p">:</span>
+        <span class="c"># Fill up data </span>
+        <span class="n">data</span><span class="p">[</span><span class="n">t</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">([</span><span class="n">pattern</span><span class="p">,</span> <span class="n">categories</span><span class="p">[</span><span class="n">t</span><span class="p">]])</span>
     
-    <span class="c"># The image corresponding to the &#39;sample&#39; index</span>
-    <span class="n">img</span> <span class="o">=</span> <span class="n">mndata</span><span class="o">.</span><span class="n">train_images</span><span class="p">[</span><span class="n">sample</span><span class="p">]</span>
-    
-    <span class="c"># The label of the image</span>
-    <span class="n">label</span> <span class="o">=</span> <span class="n">mndata</span><span class="o">.</span><span class="n">train_labels</span><span class="p">[</span><span class="n">sample</span><span class="p">]</span>
-    
-    <span class="c"># The image is stored as a rolled vector,</span>
-    <span class="c"># we have to roll it back in a matrix</span>
-    <span class="n">aimg</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">img_side</span><span class="p">,</span> <span class="n">img_side</span><span class="p">)</span>
-    
-    <span class="c"># Open a subplot for each sample</span>
-    <span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">sample</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-    
-    <span class="c"># The corresponding digit is the title of the plot</span>
-    <span class="n">title</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-    
-    <span class="c"># We use imshow to plot the matrix of pixels</span>
-    <span class="n">imshow</span><span class="p">(</span><span class="n">aimg</span><span class="p">,</span> <span class="n">interpolation</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> 
-        <span class="n">aspect</span> <span class="o">=</span> <span class="s">&#39;auto&#39;</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">binary</span><span class="p">)</span>
-    <span class="n">axis</span><span class="p">(</span><span class="s">&quot;off&quot;</span><span class="p">)</span>
-
-<span class="n">show</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">data</span>
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkwAAABjCAYAAABpAV8JAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
-AAALEgAACxIB0t1+/AAAGt5JREFUeJzt3XmYFNXVx/HvZQuRyGbAhRjQQBR8jaIR1BhBCWDcjQkx
-GFkiLkExCaBRXFAhmuBKAGWJBlFBJvgqRKKoqGA0iIALARFFFN6IsgkIoiy57x/Fud0DAz0M3VNV
-ze/zPPOgPT0zp7qqu26dOvdc571HRERERHauStwBiIiIiCSdBkwiIiIiOWjAJCIiIpKDBkwiIiIi
-OWjAJCIiIpKDBkwiIiIiOWjAJCIiIpJD6gZMzrmXnHMbnXOfb/t6J+6Y8s05V98594Rzbr1z7kPn
-3C/ijqkQnHPNnHNfOucejjuWfHPOXemcm7Vt+/4adzyF4Jxr7px7wTm3xjn3nnPu3LhjyifnXA3n
-3APb3oPrnHNvOOdOizuufNpLjtNHnHPLtu3DD5xz18cdUz7tDfswW5znjdQNmAAPXOG933fbV/O4
-AyqAYcCXQEPgQuB+51yLeEMqiGHATKJ9Wmz+AwwAHow7kEJwzlUDJgKTgHrApcAjzrlmsQaWX9WA
-JcDJ3vvawA1AiXOucbxh5VVRH6fb3A4csm0f/hjoVWQD371hH2aL7byRxgETgIs7gEJxztUCfgLc
-6L3/wnv/CtGJ6aJ4I8sv59wFwGfAVIpwf3rvn/DeTwRWxR1LgRwOHOi9v9dHXgReoYiO023vv1u8
-90u2/f9kYDFwTLyR5c9ecJzivZ/nvf8y66EtwPK44sm3vWEfmrjPG2kdMN3unFvhnPunc65N3MHk
-2XeBLd7797Meews4IqZ48s45Vxu4BfgdRThY2k6xb1+2KsD/xB1EoTjn9id6f86LO5YCKOrj1Dl3
-n3NuA9G+G+i9nxN3TAVQ7Psw9vNGGgdMvwcOAQ4CRgJ/d84dGm9IefUNYN12j30O7BtDLIUyAPiL
-9/5jivN2XLZi3b53geXOuaudc9Wdcx2Ak4GvxxxXQTjnqgOPAqO99wvjjqcAivU4BcB735Pos/VH
-wEDnXKuYQyqEot6HJOC8kboBk/d+pvd+g/d+s/d+DNFtgNPjjiuP1gO1t3usDtGgKfWcc0cD7YB7
-7aEYw6kMRbl93vvNwLnAGcAyoqu+EuD/4oyrEJxzVYCHieoKr4w5nEIpyuM027Zbxy8BfwOKcSJN
-0e7DpJw3qsXxR2WXFgLVnHNNs27LHQX8O8aY8qkN0ARY4pyD6KqvqnOuuff++3EGViBFe9XnvZ8L
-tLX/d869ChTVLB0XHaQPAA2A0733W2MOqVCK9jgtQ3WKs96nmPdhIs4bqcowOefqOOc6OudqOueq
-OecuBH4IPBN3bPnivd8A/C9wq3NuH+fcScBZRFe4xWAkcCjRIPBoYDgwGegYZ1D55pyr6pyrSXRR
-UtU59zXnXNW448on59yR296L+zjn+gL7A6NjDivf7icqcD/be/9V3MHkW7Efp865Bs65C5xztbZt
-a0fgZ0QTaYpCse/DbRJx3kjVgInoymAA0QyHFcAVwDnbFUgXg55EtSDLgUeAy733RdFvynu/0Xu/
-fNvXp0S3IDd674vtiu9G4AuimrtfAhuBour/QjQj7mPgU+AUoP22W3VFYVv7gEuJPqQ/yer9Vky3
-c4r9OPXA5US3ilcRnT8u8t6/HmtU+VXs+zAx5w3nfTFn8URERET2XNoyTCIiIiKVTgMmERERkRw0
-YBIRERHJQQMmERERkRwKOWC6i2iGQhq/ppZzG+ckINaKfpVX3HFqG3f+tamc2zc4AbFW9GtKObfx
-7QTEWtGv8oo7Tm3jzr82lHP7hiUg1op+PVXObXwnAbFW9GuXlGESERERyUEDJhEREZEcNGASERER
-yUEDJhEREZEcNGASERERyUEDJhEREZEcNGASERERyaFa3AFIbrNnz2bo0KEAjBkzBoCuXbty5ZVX
-AnDMMcfEFpuIpIstuP7b3/4WgCFDhgBw5JFHMmnSJAAaN24cT3Aieea950c/+lGpx6ZOLW+rxdKU
-YRIRERHJIVUZpq1bt7J27dodHrfsyxdffAHAwoULw+N9+/YF4LHHHgOgZs2aXHvttQDcdNNNBY95
-T7zxxhsAtG/ffoftfuihh8LV4MqVKys9tso2depULrroIgBefPFFAA477LA4Q9pjAwcOBKB///7h
-sRdeeAGANm3axBKT7Nrnn3/O+vXrAZg8eTIAK1asoHfv3gB87Wtfiy228vrwww8BePjhh0s9Pm/e
-PBYsWACkP8Nk54BNm6Jm+C+//DJXXHEFAM65Xf7sueeeC8C4ceMAqFGjRqHCzIvNmzfz6quvAnD9
-9dcD8M9//jPOkBLBMqm9e/fmX//6F0A4h1SUMkwiIiIiOSQuw7RkyRIgujKwUfMrr7wCwGeffcbj
-jz+e83d861vfAqBXr1488cQTAHzjG98A4KijjuLkk0/Oe9z5NHPmTAB++tOfArBmzZpwVVS7dm0g
-uupZtWoVQBg9H3vssZV6NTR9+nRWr14NZK7KCuX1118vmlqt0aNHA/DHP/4RgCpVqvDf//4XyH31
-K5Vr8eLFAAwaNAiAGTNmMHfu3B2e98knnwAwePDgyguugho0aAAQPgctU512//73v4Eo+z5hwgSA
-8L76z3/+U+7fM3HiRAB+/etfA3DPPfcAmc/epFmzZg2nnHIKAAcccAAQHY/233sbyyxdd911AAwf
-PjycF9u1a7dHv1sZJhEREZEcEpNhmjNnDkCoZs+u2bERYy7VqkWbY7UhtWrVonPnzgAcdNBBANSv
-Xz+RtS9ffPFFeA3sPmtZV0XNmjUD4Oqrr+aCCy4A4KSTTgKi7bZRdWV46aWXeP/994HCZZi2bt0K
-RFf6S5cuBcp/PCTVRx99BMBXX30VcyQV99prr4UamJdffhmIrvAtQ3bnnXcCcOCBBwJRTcUvf/lL
-AFq3bl3Z4e6WBQsWcO+99wLw6KOPApn6SO893/72twHYd999AZg/fz4lJSVAJitx+OGHV2rMu6NW
-rVpA+uuUjH0e9OvXD8jUlu3p73vooYcA6N69O5D5nE0ii9kynXtzhsnMmDEDiO5W/fCHPwSgU6dO
-e/Q7lWESERERySExGSa72tlvv/2A6L7srthVat26dXnppZeAzAyVPa2Er0x2ZXDZZZeFWRm7yqBY
-FmrDhg1hJpVtf1m1FYVg8Y0ZM4YTTzyxoH9r2bJlAIwaNSpkKJJ89Z7L888/z5///OdSjzVv3jzU
-kST9qnD8+PFA1MNn+fLlQOZ4aNu2bZixabNTjfc+fM+O86SwbPbvf/97AEpKSsqcjQvRzMynn34a
-yGQIW7RowYoVK4B0zFi1z9a333475kjyw7KadnciO8PUsGFDAC6++OJQz1SlSpQn8N6H+s9p06ZV
-Wryye6ZPnw7AbbfdBsDYsWOpX7/+Tp9vM+LtfNisWTPuuOOOvMSiDJOIiIhIDonJMFlmyWajPPXU
-Uxx99NEA/OY3vwnPa9myJQDPPfccEN2Pt9kR1rE2TWbPng1E22tXQKZt27YAnHHGGVx99dVAphar
-ZcuW1K1bF8j0Jars2h6rLyoE25ZLLrkkPGb1W2lkfVG6d+/OunXrgMyVcd++fWnSpElcoeW0ZcsW
-Xn/9dQAuvfRSANavXx8ynDfccAMQ1XhY1sVqBZ599tnwe4499thKi3l32EzaUaNG7fQ5duxNmTIl
-1DBZr5+0sXosq6XLNmvWLCCTxU1TnZPVj2XXU1avXh3YeebWMonf+973gNJ1o+eccw4Axx13XP6D
-LbCNGzfGHUJeeO/DZ857770HRDWDO6sn897zhz/8AYhm1QP85S9/4aijjspLPMowiYiIiOSQmAyT
-Oe+88wA49dRTwywUu9f+4IMP0qdPHyDTVwmiNZAARowYUZmh7hHr4t2hQwcA1q1bFzIOp59+OhDd
-q4Xo/rqNmi+++GIgujdvV0X2c5MnTw41ToXsWWT749NPPy3Y3zDZtWzt27cv+N/Lt+1n3GRfwVrv
-lC5dulR+YLvhkUceoUePHkBmezp06BBqBerUqROea7PFsjNLAAcffDBdu3atjHB3i/c+xJzNMn6t
-WrUCMj2zLLsEhK7YaWNZ6m7dugFw8803A9FrYV3nLXtt3bHTwLJJ2fsoF7tTYdmIbAcffDCQju7t
-25szZw4nnHBC3GHkxde//nUgc5778ssvd/rcN998M/RyLM/zd5cyTCIiIiI5JC7DZOrUqROuZu0K
-1nvPAw88ABB6ENmMB0hPl+SFCxeGqn3LoDRo0CD0rLErccuwnXnmmZx55pk5f++GDRu46667gEz/
-mEKwWUKFvE9u2Stb9wqgUaNGBft7hWKzpuy4rVq1KvXq1QMy6z4ljb3vbrzxRgBuv/328D3LOAwY
-MKBUZsl+zjKhxt6TgwcPDh2mk8Q5F2qX7N/27dvTtGlTIDPLqqzPlsrIsBaCbYvtX8swZUt7r7Py
-eOyxxxg5ciSQqeuCzOtz6623xhLX7qpWrVrICNr5ZNGiRXGGtMfs+LvppptCjXLz5s0ByqxHsvUd
-Bw0axIYNGwA4/vjjgcyKGfmgDJOIiIhIDonNMEFmpG9XQHPmzAk9h6ZOnQqkq67F7qX27ds39Aqx
-q/QxY8aEWUR7cs/VumEXgo363333XSDaPy1atCjI37FZgda59vDDDw8Zt7RYvHhxmVc3V155JRDV
-6SXRgAEDgExmqUaNGnTs2BGAP/3pT0CmrgAyx+uzzz4bZl7ZsWIz6GzGURJZ5rKsTEtZbNush0/a
-7Q3ZJIhq8SBzDC9atKjMbvs2O9tqopKubt26YdbYU089FXM0+WHnsVGjRoX9MHToUIBSmWo7dq22
-uaSkJKwlazOT83nnSRkmERERkRwSnWEyNiNu5MiRIQtj/XlOOeUUvv/97wPQs2dPILm1TDaDbfLk
-ySHGJ598EiD0tEmbfPQosb5EzzzzDBBdCdosK3udrr/++nCfPi2mTJmyQzfldu3aleorljSfffYZ
-9913X6nHOnbsGHoVZb+3rC+KddafNWtWuOL72c9+BsA111xT8JgLybqyW12E9z68BlZbAfCDH/wA
-IJUzk2x7nHOJ/ewsD6t3fPjhh8MdiGy25mFZateuDUTZpx//+MdA6Sxq0qV5v2Wzz0vLzK9cuZJe
-vXoBZZ8jrWZ39OjRQPQ62JqChXhNlGESERERySEVGSbTtGlT/vrXvwLwq1/9Coj624wZMwbIXAXa
-Fa/NOovb9vdZvfdhtJyPzFJ2DUJl1yOsXr16p9976623AEIH86lTp4Y+RFY7MHbs2PB9u6Jr1apV
-6H2yZcsWgJBFTAPLGl577bXhMVste/To0TvMLkuSTZs2hXXRsme42WP2/ps0aRLz5s0DKNW5vGrV
-qgBh3b9atWpVXvB7yGZKzZs3L8yQ+sc//lHqOdkZJnuvNWrUiAcffBAgbL9UHstKWIfvJUuWlPk5
-aI+VlXk4+eSTgUwn+7RbtWpV3CGUm33GP/LII6HPoJ0TnHPMmDEDyNRU9u7dO2zf3/72NyCzb7t0
-6cJll11WsFiVYRIRERHJIVUZJoCf/OQnAKFPSp8+fcL96uuuuw7IrJHUr1+/RPTusRlxb775JhD1
-jjr77LPz9vuzaxDytWbOrmTf27/88suB0r16jGWYbPRfvXp19tlnHyCzVlX37t1DXZpl2xo2bBi6
-9doMLHt+ki1evBiA888/Hyid7Tv00EOBna9plRQ1atQIvYeWL18ORLFvf1XuvQ/vLZu9+PHHH/PN
-b34TgLPOOquyQt4jmzdvDl33rW7i448/Dse4ZamtNmnKlCkhk22vyZYtW0KN11VXXQVEr6NULnu/
-bb8m5/bfL4vNLnv66adDDVOaTZo0Ke4Qys1WDLDVBCDz3mrWrBkzZ84ECOtZTpo0KdypsH/3339/
-INPvrlCUYRIRERHJIXUZJmPrqJWUlPD3v/8diLIVAMOHDweiWTzbr2kVB6uN2LRpExCNhn/+85/v
-0e/86quvdugb065du7DmVSHYqH/YsGFAtGbTrnrR2FpM1oOnefPmoftqWb/XrgBHjRoVshvf+c53
-8hR9YXnvGTRoEFB29/nseqYkq1evXsiWWJZo1apVIaNr+7Jr167Ur18fgF/84hdAlJnZ0+O6sth7
-8ZlnnglZa9O/f/+wzp/NfrNavXbt2jF37txSz1++fHnYv5YZPeecc1KzBllZNZA2o8x6hiWZnQte
-fPFFIKqFsb5hNWvW3OnPPfDAAwwZMgTY8TMoTZxztG3bFiCcC9Ng/PjxQKYeuXr16mEVBOuZVa9e
-vVD7O23aNABmzpy5Qz2a1Vg2adKEF154ASjMuUMZJhEREZEcUpthMvXq1Quz4qw30+bNmwGYPn16
-GJUmqc9RzZo1KzyDz2aXDRw4MKxHZ5mcPn36hJ5VhZSdNSnPFdnu9sPI7qFi9UBJ99ZbbzFlypQd
-HrcszWGHHVbZIVWYZQEty1cW51x4b9m/VapUCbVaSWWfDf379wfgjjvuCMew1a706tUr9Pyy18DW
-cnz77bdD5si60c+dOzfUjHTu3BmIViCw79tVM0DLli0LtGUVl10DaR5//HEA5s+fX5Bu/oXQpEkT
-INNdPpebb745ZJjSzjKbZtOmTaGWt3HjxnGEtEvee0aMGAEQOnPfcMMN4S5R9rFo+8hmv5V1V8Pq
-1tq0aVPQuxLKMImIiIjkkNoMk/XemDBhQqiet6tH06JFi9D/JkkqMoPIZthZnUxJSUmYaWdXg3F0
-ey3U37Tfa71VksqyEx07dtyhJ9Xxxx8fOtCmUa59u3HjxlLPc85xwQUXFDyuitqyZQs33ngjAHfe
-eScQ9YmyGZ4We926dcNninUZnj17NgDf/e53uf/++wFC3ci6det49dVXAXj00UeBqJakQ4cOpf5+
-48aNE7mKvF25jxw5MjyWXU94zz33xBJXoSWhvjVfqlUrfSr33pe5Tl5SOOdCPeR5550H7JglMytX
-rgQIfd+cc4wbNw6AI444otRzLVtVKMowiYiIiOSQqgzTu+++G+5n2kyeZcuW7fA8G20feOCBpWYs
-xcWu1uzfiRMnMnjw4HL//N13383AgQMBWLt2LQAXXnghDz30EFA86wil2YoVK0KXZ9sfPXv2DD2K
-ipHNREqLUaNGlcosAYwYMYL27dsD8NprrwFRN/Onn34ayGTRrOapW7duO1wJ16lTJ9Q/nXbaaQCM
-GzeOsWPHlnre3Xffnfdt2hN2nDZv3jzmSHbf5s2bQ4bo1FNPBcq/9pt1Zf/d735XmOBiYNka61e3
-YMGCcI6xWc1JU541NdeuXRu6edu5r1mzZnTq1Kmgse1M/KMJERERkYRLdIbpk08+AQhXasOGDQvd
-lMty3HHHAdHK9pCcbsPbz0JZtmxZGF3brID99tsvrJljPSisU/bSpUvDVa1d1ffs2XOvyCy9//77
-QPJWgbdsofUQ8d6zdetWILOfTzzxxHiCqyRpqQGxfXXrrbeG/7Z6x0GDBnHLLbcAUd82e77tQ+t1
-ZqsI5Forzn6uc+fOoT/V9t9LGqvTGjp0aHi/mcGDB4deTEnoiWb9oW677Taef/55AD744AMgM1u4
-LKtXrw7rAlpfn/Xr14fv2woE5c1SJZXVzS1btixkU9PsvvvuCzWDtkqC7fc4KMMkIiIikkPiMkyf
-fvopEFXE25XPggULgLK7sLZu3ZprrrkGIMwaS/qK4Vu2bAn3lSdMmABEdRALFy4EdtzOE044Idyn
-t6vhpF6t5ptlbZLGZi0+99xzQLQ/rD9Pz549gcz6RsUqiTO+duWAAw4IfZVsBpFlcQHOOOMMIFq5
-3mpCDjnkEKBinylpe48eccQRid2n9plo54TsbuvWj66sekH7ueeffz7MdMxmMx3tPWsd3tMq+25G
-WjrNl+XDDz8EorpDq0O2Pou7yiQWmjJMIiIiIjkkIsO0atWqsOq9XfEtWrSozIySre1k96E7dOgQ
-7j8nldXftGrVCii9Fo7N8rN6LSCs+G59Ye69997wvbRdtVaUvT5W19WtW7cYo9nRmjVrgExGFKBR
-o0ZApsdPse+rk046CdhxFmjS2H6YNm0aTz75JABvvPEGAA0bNgx1hNaRO81X5hVhr88ll1ySqlXu
-TXlngdnxaZnfs88+O3y2pr12aXtr165l4sSJQKbPURpk97UD+Oijj8JKHtuvnRoHZZhEREREcogl
-w2T9Tqxr9axZs1i6dOlOn28ZpKuuuop+/foBVMqaafli91ytI/eIESNCX6VsNnPOsm3NmjUDij9T
-UWz2lv115JFHApnj9IMPPgg1MA0aNIgtrp2pXbs2Xbp0AQhXrXvLviqPFi1ahHXj5s+fH3M0pdl+
-sh5KQ4YMYcyYMTl/rmnTpkB0DrFVH3r06AFEx2+x7f/x48cD0XqlaeyvZfvD3qf9+/cPtclJ2FfK
-MImIiIjkUOkZJu996NJt/2azK5yzzjorzEyxeqW6desmYpRZUQcddBAQzXTb1f3YNG/jnrDtPu20
-0ygpKYk5ml2zjrrWa8n6w+xNbH9Zj6IePXqEHmjWkT+pK93vre+xXWnSpElYozNbkl6rY445BoD7
-77+f1q1bA4T1AW0tx3PPPTf0I7LshPXwgWRtT761adMGiGaWp7kuyz5H+vXrl6j9pQyTiIiISA6u
-gDNb7gJ6l/WN3f2bMYwwXwDaleN5c4CWBY6lUMr7osYy9Wn7Y6SCx0DBt7GsY7kSj9fNQI1yPG8w
-cFWhgrA1njp16sTUqVMBOP/884FMzYmt3VYBzwLlWbTubeDIiv6RmCX6vZgnBdvGmN+D5gugPAf5
-MKBnoYLIfi0K8BpMBs4sx/PeAQ7P9x+vJLt80ZRhEhEREckhlllySbonKcmUlmMkLXEWUp06dQAo
-KSkJtQfDhw8HolkukNxaJkk/vQcz9FoUljJMIiIiIjkkotO3iKRfnTp1wuw4+1dXvCJSLAo5YPo/
-oqLoNHqvnM97h3QXYpZHWvfh7kjrNm4p5/PS/F58v5zPe4eoCL6YpXUf7o60buOX5XzeUtK7jeVd
-mXk+URF80SnkLDkRERGRoqAaJhEREZEcNGASERERyUEDJhEREZEcNGASERERyUEDJhEREZEcNGAS
-ERERyUEDJhEREZEcNGASERERyUEDJhEREZEcNGASERERyUEDJhEREZEcNGASERERyUEDJhEREZEc
-NGASERERyUEDJhEREZEcNGASERERyUEDJhEREZEcNGASERERyUEDJhEREZEcNGASERERyeH/Adno
-UZQK5I76AAAAAElFTkSuQmCC
-"
->
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -494,7 +399,7 @@ Next cell is just for styling</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
@@ -512,7 +417,7 @@ Next cell is just for styling</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[2]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[7]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <style>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>mnist</title>
+<title>mnist-hopfield</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -174,163 +174,119 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="The-MNIST-dataset">The MNIST dataset<a class="anchor-link" href="#The-MNIST-dataset">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The MNIST database of handwritten digits, available at <a href="http://yann.lecun.com/exdb/mnist">Yann Lecun web site</a>, has a training set of 60,000 examples, and a test set of 10,000 examples. It is a subset of a larger set available from NIST.</p>
-<p>The digits have been size-normalized and centered in a fixed-size image.
-It is a good database for people who want to try learning techniques and pattern recognition methods on real-world data while spending minimal efforts on preprocessing and formatting.</p>
-<h3 id="MNIST-numbers">MNIST numbers<a class="anchor-link" href="#MNIST-numbers">&#182;</a></h3><table>
-<thead><tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>training images:</strong></td>
-<td>60000</td>
-</tr>
-<tr>
-<td><strong>test images:</strong></td>
-<td>10000</td>
-</tr>
-<tr>
-<td><strong>image pixels:</strong></td>
-<td>28x28</td>
-</tr>
-<tr>
-<td><strong>image format:</strong></td>
-<td>raw vector of 784 elements</td>
-</tr>
-<tr>
-<td></td>
-<td>encoding 0-255</td>
-</tr>
-</tbody>
-</table>
-<h3 id="MNIST-with-pyhton">MNIST with pyhton<a class="anchor-link" href="#MNIST-with-pyhton">&#182;</a></h3><p>To obtain and use it in python just install <a href="https://github.com/sorki/python-mnist">python-mnist</a>:</p>
-
-<pre><code>sudo pip install python_mnist</code></pre>
-<p>Then download the files of the dataset in a folder called data by running these few lines:</p>
-
+<h1 id="Storing-and-recalling-MNIST-digits">Storing and recalling MNIST digits<a class="anchor-link" href="#Storing-and-recalling-MNIST-digits">&#182;</a></h1>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c"># Download bash script </span>
-<span class="o">!</span> wget https://raw.githubusercontent.com/sorki/python-mnist/master/get_data.sh &gt; /dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
-    
-<span class="c"># Run it to create the &#39;data&#39; folder and fill it with the dataset files</span>
-<span class="o">!</span> bash get_data.sh &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
-
-<span class="c"># Remove the script file</span>
-<span class="o">!</span> rm get_data.sh* &gt; /dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we can get the data in a readable way by using the load_training and load_testing methods of the MNIST object:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c"># import the mnist class</span>
-<span class="kn">from</span> <span class="nn">mnist</span> <span class="kn">import</span> <span class="n">MNIST</span> 
-
-<span class="c"># init with the &#39;data&#39; dir</span>
-<span class="n">mndata</span> <span class="o">=</span> <span class="n">MNIST</span><span class="p">(</span><span class="s">&#39;./data&#39;</span><span class="p">)</span>    
-
-<span class="c"># Load data</span>
-<span class="n">mndata</span><span class="o">.</span><span class="n">load_training</span><span class="p">()</span> 
-<span class="n">mndata</span><span class="o">.</span><span class="n">load_testing</span><span class="p">()</span>
-
-<span class="c"># The number of pixels per side of all images</span>
-<span class="n">img_side</span> <span class="o">=</span> <span class="mi">28</span>
-
-<span class="c"># Each input is a raw vector.</span>
-<span class="c"># The number of units of the network </span>
-<span class="c"># corresponds to the number of input elements</span>
-<span class="n">n_mnist_pixels</span> <span class="o">=</span> <span class="n">img_side</span><span class="o">*</span><span class="n">img_side</span> 
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Below, as an example, we take the first ten samples from the training set and plot them:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[200]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
 
-<span class="c"># Define the number of samples to take</span>
-<span class="n">num_samples</span> <span class="o">=</span> <span class="mi">10</span>
+</div>
+</div>
+</div>
 
-<span class="c"># create a figure where we will store all samples </span>
-<span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let us implement a Hopfield network using images from <a href="http://nbviewer.ipython.org/github/francesco-mannella/neunet-basics/blob/master/course/mnist.ipynb">the MNIST dataset</a> as patterns.</p>
 
-<span class="c"># Iterate over samples indices</span>
-<span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">num_samples</span><span class="p">)</span> <span class="p">:</span>
-    
-    <span class="c"># The image corresponding to the &#39;sample&#39; index</span>
-    <span class="n">img</span> <span class="o">=</span> <span class="n">mndata</span><span class="o">.</span><span class="n">train_images</span><span class="p">[</span><span class="n">sample</span><span class="p">]</span>
-    
-    <span class="c"># The label of the image</span>
-    <span class="n">label</span> <span class="o">=</span> <span class="n">mndata</span><span class="o">.</span><span class="n">train_labels</span><span class="p">[</span><span class="n">sample</span><span class="p">]</span>
-    
-    <span class="c"># The image is stored as a rolled vector,</span>
-    <span class="c"># we have to roll it back in a matrix</span>
-    <span class="n">aimg</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">img_side</span><span class="p">,</span> <span class="n">img_side</span><span class="p">)</span>
-    
-    <span class="c"># Open a subplot for each sample</span>
-    <span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">sample</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-    
-    <span class="c"># The corresponding digit is the title of the plot</span>
-    <span class="n">title</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-    
-    <span class="c"># We use imshow to plot the matrix of pixels</span>
-    <span class="n">imshow</span><span class="p">(</span><span class="n">aimg</span><span class="p">,</span> <span class="n">interpolation</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> 
-        <span class="n">aspect</span> <span class="o">=</span> <span class="s">&#39;auto&#39;</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">binary</span><span class="p">)</span>
-    <span class="n">axis</span><span class="p">(</span><span class="s">&quot;off&quot;</span><span class="p">)</span>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Initialize-the-dataset">Initialize the dataset<a class="anchor-link" href="#Initialize-the-dataset">&#182;</a></h4><p>First we initialize the dataset:</p>
 
-<span class="n">show</span><span class="p">()</span>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[201]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="c">#### Download the dataset </span>
+<span class="c"># Get the script from internet</span>
+<span class="o">!</span> wget https://raw.githubusercontent.com/sorki/python-mnist/master/get_data.sh &gt; /dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>  
+
+<span class="c"># Run it to dovnload all files in a local dir named &#39;data&#39;</span>
+<span class="o">!</span> bash get_data.sh &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c"># We do not need the script anymore, remove it</span>
+<span class="o">!</span> rm get_data.sh* &gt; /dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c"># Initialize the dataset variables</span>
+<span class="o">%</span><span class="k">run</span> utils
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We now fill a array with all parameters. We only need few samples, we take them from the training set. 
+We take samples 2 and 5, representing respectively a '4' and a '2'</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[237]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="c"># Take two rows</span>
+<span class="n">patterns</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">mndata</span><span class="o">.</span><span class="n">train_images</span><span class="p">)[[</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">],]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">mndata</span><span class="o">.</span><span class="n">train_labels</span><span class="p">)[[</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">],]</span>
+
+    <span class="c"># We need only the sign (transform to binary input)</span>
+<span class="n">patterns</span> <span class="o">=</span> <span class="n">sign</span><span class="p">(</span><span class="n">patterns</span><span class="o">/</span><span class="mf">255.0</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c"># Set the number of patterns (two in out case)</span>
+<span class="n">n_patterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let us visualize our two patterns:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[203]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">n_patterns</span><span class="p">):</span>
+    <span class="n">plot_img</span><span class="p">(</span> <span class="n">to_mat</span><span class="p">(</span><span class="n">patterns</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> 
+             <span class="n">fig</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">windows</span> <span class="o">=</span> <span class="mi">2</span> <span class="p">)</span>
 </pre></div>
 
 </div>
@@ -345,129 +301,37 @@ It is a good database for people who want to try learning techniques and pattern
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-0ygpKYk5ml2zjrrWa8n6w+xNbH9Zj6IePXqEHmjWkT+pK93vre+xXWnSpElYozNbkl6rY445BoD7
-77+f1q1bA4T1AW0tx3PPPTf0I7LshPXwgWRtT761adMGiGaWp7kuyz5H+vXrl6j9pQyTiIiISA6u
-gDNb7gJ6l/WN3f2bMYwwXwDaleN5c4CWBY6lUMr7osYy9Wn7Y6SCx0DBt7GsY7kSj9fNQI1yPG8w
-cFWhgrA1njp16sTUqVMBOP/884FMzYmt3VYBzwLlWbTubeDIiv6RmCX6vZgnBdvGmN+D5gugPAf5
-MKBnoYLIfi0K8BpMBs4sx/PeAQ7P9x+vJLt80ZRhEhEREckhlllySbonKcmUlmMkLXEWUp06dQAo
-KSkJtQfDhw8HolkukNxaJkk/vQcz9FoUljJMIiIiIjkkotO3iKRfnTp1wuw4+1dXvCJSLAo5YPo/
-oqLoNHqvnM97h3QXYpZHWvfh7kjrNm4p5/PS/F58v5zPe4eoCL6YpXUf7o60buOX5XzeUtK7jeVd
-mXk+URF80SnkLDkRERGRoqAaJhEREZEcNGASERERyUEDJhEREZEcNGASERERyUEDJhEREZEcNGAS
-ERERyUEDJhEREZEcNGASERERyUEDJhEREZEcNGASERERyUEDJhEREZEcNGASERERyUEDJhEREZEc
-NGASERERyUEDJhEREZEcNGASERERyUEDJhEREZEcNGASERERyUEDJhEREZEcNGASERERyeH/Adno
-UZQK5I76AAAAAElFTkSuQmCC
+<img src="data:image/png;base64,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
+LsWuTztuAAAAAElFTkSuQmCC
 "
 >
 </div>
@@ -483,10 +347,552 @@ UZQK5I76AAAAAElFTkSuQmCC
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<h4 id="Learning-the-weights">Learning the weights<a class="anchor-link" href="#Learning-the-weights">&#182;</a></h4><p>Learning of the weight happens offline at the beginning, in one shot:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[204]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="c"># Initialize weights to zero values</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">])</span>
+
+<span class="c"># Accumulate outer products </span>
+<span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span> <span class="p">:</span>
+    <span class="n">W</span> <span class="o">+=</span> <span class="n">outer</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+
+<span class="c"># Divide times the number of patterns</span>
+<span class="n">W</span> <span class="o">/=</span> <span class="nb">float</span><span class="p">(</span><span class="n">n_patterns</span><span class="p">)</span>
+
+<span class="c"># Exclude the autoconnections</span>
+<span class="n">W</span> <span class="o">*=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Recall:-Iterating-the-timesteps">Recall: Iterating the timesteps<a class="anchor-link" href="#Recall:-Iterating-the-timesteps">&#182;</a></h4><p>Now we implement the recall part, in which we give an initial activation to the network and iterate the timesteps unitil it relaxes to a steady state.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[205]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="c"># Number of timesteps</span>
+<span class="n">stime</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="c"># Number of samples to store as long </span>
+<span class="c"># as spreading goes on</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="c"># store data at each sampling interval</span>
+<span class="n">sample_interval</span> <span class="o">=</span> <span class="n">stime</span><span class="o">/</span><span class="n">samples</span>
+
+<span class="c"># Init the stories of spreading as a zero array,</span>
+<span class="c"># we will fill it in at each timestep and we will </span>
+<span class="c"># plot it at the end</span>
+<span class="n">store_images</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">([</span><span class="n">n_patterns</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">samples</span><span class="p">])</span>
+
+<span class="c"># Init the stories of energy as a zero array,</span>
+<span class="c"># we will fill it in at each timestep and we will </span>
+<span class="c"># plot it at the end</span>
+<span class="n">store_energy</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">([</span><span class="n">n_patterns</span><span class="p">,</span> <span class="n">samples</span><span class="p">])</span>
+
+<span class="c"># We simulate two iterations, each one starting</span>
+<span class="c"># with a coorupted version of one of our two patterns</span>
+<span class="k">for</span> <span class="n">target_index</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">n_patterns</span><span class="p">)</span> <span class="p">:</span>
+
+    <span class="c"># Copy the original pattern</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">[</span><span class="n">target_index</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    
+    <span class="c"># Then modify the second half of the image </span>
+    <span class="c"># putting random binary values</span>
+    <span class="n">x</span><span class="p">[(</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">):]</span> <span class="o">=</span> <span class="n">sign</span><span class="p">(</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+
+    
+    <span class="c"># During the iterations we need to peek </span>
+    <span class="c"># one unit at random. Thus we must prepare</span>
+    <span class="c"># a random sequence of indices:</span>
+    <span class="c">#    we get the sequence of indices </span>
+    <span class="c">#    of the network units</span>
+    <span class="n">x_indices</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    
+    <span class="c">#    and we shuffle it</span>
+    <span class="n">shuffle</span><span class="p">(</span><span class="n">x_indices</span><span class="p">)</span>
+    
+    <span class="c"># the iterations</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">stime</span><span class="p">)</span> <span class="p">:</span>
+        <span class="c"># Get the current index browsing </span>
+        <span class="c"># the random sequence </span>
+        <span class="n">current_x</span> <span class="o">=</span> <span class="n">x_indices</span><span class="p">[</span><span class="n">t</span><span class="o">%</span><span class="k">n</span>]   
+        
+        <span class="c"># Activation of a unit</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">current_x</span><span class="p">]</span> <span class="o">=</span> <span class="n">sign</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">current_x</span><span class="p">,:],</span> <span class="n">x</span><span class="p">))</span>
+        
+        <span class="c"># Store current activations</span>
+        <span class="k">if</span> <span class="n">stime</span><span class="o">%</span><span class="k">sample_interval</span> == 0 :
+            <span class="c"># Energy of the current state of the network</span>
+            <span class="n">store_energy</span><span class="p">[</span><span class="n">target_index</span><span class="p">,</span> <span class="n">t</span><span class="o">/</span><span class="n">sample_interval</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+            
+            <span class="c"># array containing samples of network activation</span>
+            <span class="n">store_images</span><span class="p">[</span><span class="n">target_index</span><span class="p">,:,</span><span class="n">t</span><span class="o">/</span><span class="n">sample_interval</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here you can see two animations showing the network that is initially activated with one of the two patterns. The initial activation is corrupted with a lot of noise so that the bottom half of the figure is completelly obscured. 
+The network moves from this initial activation to the correct attractor state (the original uncorrupted figure). During this process the energy of the network lowers untill it reaches a steady state.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="mnist-hopfield_4.gif" width=100%>
+<img src="mnist-hopfield_2.gif" width=100%></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Appendix:-How-to-build-the-animation">Appendix: How to build the animation<a class="anchor-link" href="#Appendix:-How-to-build-the-animation">&#182;</a></h4><p>We use the <a href="http://matplotlib.org/api/animation_api.html">matplotlib.animation</a> package for animations and the <a href="http://matplotlib.org/users/gridspec.html">gridspec</a> class to customize the layout of subplots.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[206]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="c"># The matplotlib object to do animations</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">animation</span>
+
+<span class="c"># This grid allows to layout subplots in a more</span>
+<span class="c"># flexible way</span>
+<span class="kn">import</span> <span class="nn">matplotlib.gridspec</span> <span class="kn">as</span> <span class="nn">gridspec</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To plot the two animations we need a function to initialize a figure with three plots: the first showing the target digit, the second showing the current activity of the network and the third showing the sum of squared errors.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[232]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="k">def</span> <span class="nf">init_figure</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span> <span class="p">:</span>
+
+    <span class="c"># Init the grid and the figure</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+    <span class="c">#-------------------------------------------------</span>
+    <span class="c"># Plot 1 - plot the target digit</span>
+
+    <span class="c"># Create subplot</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:</span><span class="mi">4</span><span class="p">,:</span><span class="mi">4</span><span class="p">])</span>
+
+    <span class="n">title</span><span class="p">(</span><span class="s">&quot;target&quot;</span><span class="p">)</span>
+
+    <span class="c"># Create the imshow and save the handler</span>
+    <span class="n">im_target</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">to_mat</span><span class="p">(</span><span class="n">patterns</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> 
+            <span class="n">interpolation</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> 
+            <span class="n">aspect</span> <span class="o">=</span> <span class="s">&#39;auto&#39;</span><span class="p">,</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">binary</span><span class="p">)</span> 
+    <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+
+
+    <span class="c">#-------------------------------------------------</span>
+    <span class="c"># Plot 2 - plot the current state of the network</span>
+
+    <span class="c"># Create subplot</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="mi">10</span><span class="p">])</span>
+
+    <span class="n">title</span><span class="p">(</span><span class="s">&quot;recalling&quot;</span><span class="p">)</span>
+
+    <span class="c"># Create the imshow and save the handler</span>
+    <span class="n">im_activation</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">to_mat</span><span class="p">(</span><span class="n">store_images</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]),</span> 
+            <span class="n">interpolation</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> 
+            <span class="n">aspect</span> <span class="o">=</span> <span class="s">&#39;auto&#39;</span><span class="p">,</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">binary</span><span class="p">)</span> 
+    <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+
+    <span class="c">#-------------------------------------------------</span>
+    <span class="c"># Plot 3 - plot the current history of energy</span>
+
+    <span class="c"># Create subplot</span>
+    <span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:</span><span class="mi">4</span><span class="p">,</span><span class="mi">12</span><span class="p">:])</span>
+
+    <span class="n">title</span><span class="p">(</span><span class="s">&quot;Energy&quot;</span><span class="p">)</span>
+
+    <span class="c"># Create the line plot and save the handler</span>
+    <span class="n">im_energy</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">store_energy</span><span class="p">[</span><span class="mi">0</span><span class="p">,])</span>
+
+    <span class="c"># Only bottom-left axes - no tics</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>   
+    
+    <span class="c"># return plot handlers</span>
+    <span class="k">return</span> <span class="n">im_target</span><span class="p">,</span> <span class="n">im_activation</span><span class="p">,</span> <span class="n">im_energy</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We also need one another function that updates the figure at 
+each animation timestep with a new sample</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[244]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="c"># Updates images at each frame of the animation</span>
+<span class="c"># data    : list of tuples    Each row contains the</span>
+<span class="c">#                             arguments of update for </span>
+<span class="c">#                             a frame</span>
+<span class="c"># returns : tuple             The handlers of the </span>
+<span class="c">#                             images </span>
+<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="p">:</span>
+
+    <span class="c"># unpack plot handlers and data </span>
+    <span class="n">im_A</span><span class="p">,</span> <span class="n">im_B</span><span class="p">,</span> <span class="n">im_C</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span> <span class="o">=</span> <span class="n">data</span>
+    
+    <span class="c"># Update data of plot 1, plot 2 and 3</span>
+    <span class="n">im_A</span><span class="o">.</span><span class="n">set_array</span><span class="p">(</span><span class="n">to_mat</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
+    <span class="n">im_B</span><span class="o">.</span><span class="n">set_array</span><span class="p">(</span><span class="n">to_mat</span><span class="p">(</span><span class="n">B</span><span class="p">))</span>
+    <span class="n">im_C</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">C</span><span class="p">)),</span> <span class="n">C</span><span class="p">)</span>  
+    
+    <span class="c"># return plot handlers</span>
+    <span class="k">return</span> <span class="n">im_A</span><span class="p">,</span> <span class="n">im_B</span><span class="p">,</span> <span class="n">im_C</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Finally we use the FuncAnimation class. We first build a data list where each row is a tuple containing plot handlers and data do for plot updates..</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[245]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="k">for</span> <span class="n">target_index</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">n_patterns</span><span class="p">):</span>
+
+    <span class="c"># Init the figure</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">))</span>      
+    
+    <span class="n">im_target</span><span class="p">,</span> <span class="n">im_activation</span><span class="p">,</span> <span class="n">im_energy</span> <span class="o">=</span> <span class="n">init_figure</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+    
+    <span class="c"># Build the sequence of update arguments.</span>
+    <span class="c"># each row of the list contains:</span>
+    <span class="c"># 1 the target plot handler</span>
+    <span class="c"># 2 the activation plot handler</span>
+    <span class="c"># 3 the energy plot handler</span>
+    <span class="c"># 4 the target update data</span>
+    <span class="c"># 5 the activation update data</span>
+    <span class="c"># 6 the energy update data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[(</span>
+            <span class="n">im_target</span><span class="p">,</span> 
+            <span class="n">im_activation</span><span class="p">,</span> 
+            <span class="n">im_energy</span><span class="p">,</span>
+            <span class="n">patterns</span><span class="p">[</span><span class="n">target_index</span><span class="p">],</span>
+            <span class="n">squeeze</span><span class="p">(</span><span class="n">store_images</span><span class="p">[</span><span class="n">target_index</span><span class="p">,:,</span><span class="n">t</span><span class="p">]),</span> 
+            <span class="n">store_energy</span><span class="p">[</span><span class="n">target_index</span><span class="p">,</span> <span class="p">:</span><span class="n">t</span><span class="p">]</span> <span class="p">)</span> 
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">samples</span> <span class="p">)</span> <span class="p">]</span>
+
+    <span class="c"># Create and render the animation</span>
+    <span class="n">anim</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">func</span> <span class="o">=</span> <span class="n">update</span><span class="p">,</span>  <span class="n">frames</span> <span class="o">=</span> <span class="n">data</span> <span class="p">)</span>
+    <span class="c"># save it to file</span>
+    <span class="n">anim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">&quot;mnist-hopfield_{:d}.gif&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">target_index</span><span class="p">]),</span>
+              <span class="n">fps</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="s">&#39;imagemagick&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+7h6DObIaWMUAAAAASUVORK5CYII=
+"
+>
+</div>
+
+</div>
+
+<div class="output_area"><div class="prompt"></div>
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+"
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 Next cell is just for styling</p>
 
 </div>
@@ -494,7 +900,7 @@ Next cell is just for styling</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[247]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
@@ -512,7 +918,7 @@ Next cell is just for styling</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[2]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[247]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <style>
