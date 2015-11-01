@@ -186,6 +186,10 @@ div#notebook {
 <p>The MNIST database of handwritten digits, available at <a href="http://yann.lecun.com/exdb/mnist">Yann Lecun web site</a>, has a training set of 60,000 examples, and a test set of 10,000 examples. It is a subset of a larger set available from NIST.</p>
 <p>The digits have been size-normalized and centered in a fixed-size image.
 It is a good database for people who want to try learning techniques and pattern recognition methods on real-world data while spending minimal efforts on preprocessing and formatting.</p>
+<p><br></p>
+<p><div>Table of contents</div></p>
+<p><div id="toc"></div>
+<br></p>
 <h3 id="MNIST-numbers">MNIST numbers<a class="anchor-link" href="#MNIST-numbers">&#182;</a></h3><table>
 <thead><tr>
 <th></th>
@@ -215,40 +219,25 @@ It is a good database for people who want to try learning techniques and pattern
 </tr>
 </tbody>
 </table>
-<h3 id="MNIST-with-pyhton">MNIST with pyhton<a class="anchor-link" href="#MNIST-with-pyhton">&#182;</a></h3><p>To obtain and use it in python just install <a href="https://github.com/sorki/python-mnist">python-mnist</a>:</p>
+<h3 id="MNIST-with-pyhton">MNIST with pyhton<a class="anchor-link" href="#MNIST-with-pyhton">&#182;</a></h3><h6 id="Get-the-dataset-and-the-python-functionalities">Get the dataset and the python functionalities<a class="anchor-link" href="#Get-the-dataset-and-the-python-functionalities">&#182;</a></h6><p>To can obtain and use it in python in two steps:</p>
+<ul>
+<li>Install <a href="https://github.com/sorki/python-mnist">python-mnist</a>:</li>
+</ul>
 
 <pre><code>sudo pip install python_mnist</code></pre>
-<p>Then download the files of the dataset in a folder called data by running these few lines:</p>
+<ul>
+<li>Download the files of the dataset in a folder called data. You can find them <a href="mnist-data.zip">here</a>. Just unzip them in the same directory of your python scripts.</li>
+</ul>
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c"># Download bash script </span>
-<span class="o">!</span> wget https://raw.githubusercontent.com/sorki/python-mnist/master/get_data.sh &gt; /dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
-    
-<span class="c"># Run it to create the &#39;data&#39; folder and fill it with the dataset files</span>
-<span class="o">!</span> bash get_data.sh &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
-
-<span class="c"># Remove the script file</span>
-<span class="o">!</span> rm get_data.sh* &gt; /dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we can get the data in a readable way by using the load_training and load_testing methods of the MNIST object:</p>
+<h6 id="Using-the-dataset-in-python">Using the dataset in python<a class="anchor-link" href="#Using-the-dataset-in-python">&#182;</a></h6><p>Now we can use the dataset in a readable way by using the load_training and load_testing methods of the MNIST object:</p>
 
 </div>
 </div>
@@ -494,7 +483,7 @@ Next cell is just for styling</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
@@ -512,7 +501,7 @@ Next cell is just for styling</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[2]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[4]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <style>
