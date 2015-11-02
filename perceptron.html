@@ -252,7 +252,7 @@ $$</p>
 <p><em>Using linear algebra in a neural network implementation is far simpler than writing loops, it is less error prone and also produces a much efficient code in terms of speed!!</em></p>
 <p>If the network is composed of more than one output units, the weighted sums can be expressed as:
 $$
-net_j = \sum_{ij} w_{ij} x_i
+net_j = \sum_{i}\sum_{j} w_{ij} x_i
 $$
 and they can be written in linear algebra notation as:
 $$
@@ -353,11 +353,15 @@ $$x_2 = -\frac{x_1 w_1 + w_0}{w_2}$$<p><img src="linear.png" alt=""></p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="The-error">The error<a class="anchor-link" href="#The-error">&#182;</a></h3><p>We can analyze if how much the network has learned by measuring the error. We compute the error at each timestep as the sum of the squares of the errors for each output unit:
+<h3 id="The-error">The error<a class="anchor-link" href="#The-error">&#182;</a></h3><p>We can analyze if how much the network has learned by measuring the error. We compute the error at each timestep as the sum of the squared errors (SSE) for each output unit:
 $$
-E_t = \sum_i \frac{1}{2}(o_i - y_i)^2
-$$</p>
-<p>If the network is learning the error diminuishes and it converges to a minimum. After a while the error cannot diminuish anymore and the network reaches a steady state.</p>
+E_t = \sum_i \frac{1}{2}(o_{it} - y_{it})^2
+$$
+Furthermore we sum all the SSE collected during each k-th presentation of all the series of the input patterns $p$:
+$$
+E_k = \sum_{p}\sum_{i} \frac{1}{2}(o_{pi} - y_{pi})^2
+$$
+If the network is learning the error diminuishes and it converges to a minimum. After a while the error cannot diminuish anymore and the network reaches a steady state.</p>
 
 </div>
 </div>
