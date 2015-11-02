@@ -43,6 +43,11 @@ def to_mat(x) :
     return x.reshape( img_side, img_side )
 
 #-------------------------------------------------------------
+# Add a bias unit to the input
+def biased(x) :
+    return hstack([1,x])
+
+#-------------------------------------------------------------
 # step function
 # return:    1 if x > 0
 #            0 otherwise
@@ -52,14 +57,29 @@ def step(x) :
 #-------------------------------------------------------------
 # sigmoid function
 # t   float temperature
-def sigmoid(x,t=1.0) :
+def sigmfun(x, t = 1.0) :
     return 1.0/(1.0 + exp(-x/t))
+
+# sigmoid derivative
+def sigmder(y) :
+    return y*(1-y)
+
+#-------------------------------------------------------------
+# hyperbolic tangent function
+# th     float threshold
+# alpha  float amplitude
+def tanhfun(x, th = 0.0, alpha = 1.0) :
+    return tanh(alpha*(x - th))
+
+# hyperbolic tangent derivative
+def tanhder(y) :
+    return 1-y**2
 
 #-------------------------------------------------------------
 # RELU: rectifier linear unit function
 # t   float temperature
-def sigmoid(x) :
-    return maximum(0,x)
+def relufun(x) :
+    return maximum(0, x)
 
 #-------------------------------------------------------------
 # Create an array with 2-dimensional patterns belonging to two categories
