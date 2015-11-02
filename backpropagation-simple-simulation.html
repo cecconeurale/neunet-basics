@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>Utilities</title>
+<title>backpropagation-simple-simulation</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -169,230 +169,551 @@ div#notebook {
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Utilities">Utilities<a class="anchor-link" href="#Utilities">&#182;</a></h3><p>The file <code>utils.py</code> contains some usefull stuff which is used throughout all notebooks in this site.</p>
-<p>First of all it includes the initialization of all constants and variables for the use of MNIST database:</p>
-
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c"># import the mnist class</span>
-<span class="kn">from</span> <span class="nn">mnist</span> <span class="kn">import</span> <span class="n">MNIST</span> 
+<div class=" highlight hl-ipython2"><pre><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="c"># init with the &#39;data&#39; dir</span>
-<span class="n">mndata</span> <span class="o">=</span> <span class="n">MNIST</span><span class="p">(</span><span class="s">&#39;./data&#39;</span><span class="p">)</span>    
+<span class="c"># number of training patterns</span>
+<span class="n">np</span> <span class="o">=</span> <span class="mi">200</span>
 
-<span class="c"># Load data</span>
-<span class="n">mndata</span><span class="o">.</span><span class="n">load_training</span><span class="p">()</span> 
-<span class="n">mndata</span><span class="o">.</span><span class="n">load_testing</span><span class="p">()</span>
+<span class="n">c1</span> <span class="o">=</span><span class="p">[]</span>
+<span class="n">c2</span> <span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">99</span><span class="p">)</span> <span class="p">:</span>
+    <span class="n">angle</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="p">((</span><span class="n">pi</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mf">98.0</span><span class="p">)</span>
+    <span class="n">c1</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">2</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span> <span class="mi">2</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)])</span> 
+    <span class="n">c2</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="o">.</span><span class="mi">2</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span> <span class="o">.</span><span class="mi">2</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)])</span> 
 
-<span class="c"># The number of pixels per side of all images</span>
-<span class="n">img_side</span> <span class="o">=</span> <span class="mi">28</span>
+<span class="c"># Training data </span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">build_dataset</span><span class="p">(</span><span class="n">np</span><span class="p">,</span><span class="n">centroids1</span><span class="o">=</span><span class="n">array</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span><span class="n">centroids2</span><span class="o">=</span><span class="n">array</span><span class="p">(</span><span class="n">c2</span><span class="p">),</span>
+                    <span class="n">std_deviation</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
 
-<span class="c"># Each input is a raw vector.</span>
-<span class="c"># The number of units of the network </span>
-<span class="c"># corresponds to the number of input elements</span>
-<span class="n">n_mnist_pixels</span> <span class="o">=</span> <span class="n">img_side</span><span class="o">*</span><span class="n">img_side</span> 
-</pre></div>
 
-</div>
-</div>
-</div>
+<span class="c">#-------------------------------------------------------------------------</span>
+<span class="c"># Iput and desired output</span>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Then you find a function to plot mnist images in a row of subplots:</p>
+<span class="c"># Each row of P is an input pattern</span>
+<span class="n">P</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">]</span>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c"># Set the maximum number of plots to be printed in a row</span>
-<span class="n">windows</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="c"># Each element of o is the desired output </span>
+<span class="c"># relative to an input pattern</span>
+<span class="n">o</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
 
-<span class="c"># A custom plot that uses imshow to draw a matrix</span>
-<span class="c"># x      :  array           The matrix to be plotted</span>
-<span class="c"># fig    :  figure object   Figure device to use</span>
-<span class="c"># window :  int             The current subplot position</span>
-<span class="c"># windows:  int             Number of subplot</span>
-<span class="k">def</span> <span class="nf">plot_img</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">windows</span> <span class="o">=</span> <span class="n">windows</span><span class="p">)</span> <span class="p">:</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">windows</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">interpolation</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> 
-              <span class="n">aspect</span> <span class="o">=</span> <span class="s">&#39;auto&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">Greys</span><span class="p">)</span>  
-    <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-</pre></div>
+<span class="c">#-------------------------------------------------------------------------</span>
 
-</div>
-</div>
-</div>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>and a function to reshape raw mnist data as squared matrices:</p>
+<span class="c"># limits</span>
+<span class="n">upper_bound</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.2</span><span class="o">*</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">-</span><span class="n">P</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">lower_bound</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.2</span><span class="o">*</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">-</span><span class="n">P</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c">#-------------------------------------------------------------</span>
-<span class="c"># transform a raw input in an image matrix  </span>
-<span class="c"># x:      array    the raw input vector</span>
-<span class="c"># return  array    a squared matrix</span>
-<span class="k">def</span> <span class="nf">to_mat</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">:</span>
-    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span> <span class="n">img_side</span><span class="p">,</span> <span class="n">img_side</span> <span class="p">)</span>
-</pre></div>
+<span class="c">#-------------------------------------------------------------------------</span>
+<span class="c">#-------------------------------------------------------------------------</span>
 
-</div>
-</div>
-</div>
+<span class="n">outfun</span> <span class="o">=</span> <span class="n">tanhfun</span>
+<span class="n">derfun</span> <span class="o">=</span> <span class="n">tanhder</span>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Finally you have some general use functions.</p>
-<p>A list of transfer functions:</p>
+<span class="c">#-------------------------------------------------------------------------</span>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c">#-------------------------------------------------------------</span>
-<span class="c"># Add a bias unit to the input</span>
-<span class="k">def</span> <span class="nf">biased</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">:</span>
-    <span class="k">return</span> <span class="n">hstack</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="n">x</span><span class="p">])</span>
+<span class="c"># Constants</span>
 
-<span class="c">#-------------------------------------------------------------</span>
-<span class="c"># step function</span>
-<span class="c"># return:    1 if x &gt; 0</span>
-<span class="c">#            0 otherwise</span>
-<span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">:</span>
-    <span class="k">return</span> <span class="mf">1.0</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+<span class="c"># Learning rate</span>
+<span class="n">eta</span> <span class="o">=</span> <span class="mf">0.005</span>    
 
-<span class="c">#-------------------------------------------------------------</span>
-<span class="c"># sigmoid function</span>
-<span class="c"># t   float temperature</span>
-<span class="k">def</span> <span class="nf">sigmfun</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">:</span>
-    <span class="k">return</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="n">t</span><span class="p">))</span>
+<span class="c"># Number of timesteps</span>
+<span class="n">stime</span> <span class="o">=</span> <span class="n">np</span><span class="o">*</span><span class="mi">200</span>  
 
-<span class="c"># sigmoid derivative</span>
-<span class="k">def</span> <span class="nf">sigmder</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="p">:</span>
-    <span class="k">return</span> <span class="n">y</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="p">)</span>
+<span class="c"># number of layer units</span>
+<span class="n">nl</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 
-<span class="c">#-------------------------------------------------------------</span>
-<span class="c"># hyperbolic tangent function</span>
-<span class="c"># th     float threshold</span>
-<span class="c"># alpha  float amplitude</span>
-<span class="k">def</span> <span class="nf">tanhfun</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">:</span>
-    <span class="k">return</span> <span class="n">tanh</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">th</span><span class="p">))</span>
+<span class="c"># number of layers </span>
+<span class="n">num_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span>
 
-<span class="c"># hyperbolic tangent derivative</span>
-<span class="k">def</span> <span class="nf">tanhder</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="p">:</span>
-    <span class="k">return</span> <span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span>
-</pre></div>
+<span class="c"># Variables</span>
 
-</div>
-</div>
-</div>
+<span class="c">#-------------------------------------------------------------------------</span>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>A function to build a dataset of points based on two lists (belonging/not belonging) centroids.</p>
+<span class="c"># Initialize units</span>
+<span class="n">units</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nl</span> <span class="p">:</span>
+    <span class="n">units</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c">#-------------------------------------------------------------</span>
-<span class="c"># Create an array with 2-dimensional patterns belonging to two categories</span>
-<span class="c"># n_patterns    :        int                 Number of patterns</span>
-<span class="c"># std_deviation :        float               Standard deviation of noise</span>
-<span class="c"># centroids1    :        2-elements-vectors  Points from which the</span>
-<span class="c">#                        list                patterns belonging to </span>
-<span class="c">#                                            the class are generated</span>
-<span class="c"># centroids2    :        2-elements-vectors  Points from which the</span>
-<span class="c">#                        list                patterns not belonging </span>
-<span class="c">#                                            to the class are generated</span>
-<span class="c"># returns       :        array               Each row contains a pattern as</span>
-<span class="c">#                                            its first two elements and</span>
-<span class="c">#                                            the group (belonging/not </span>
-<span class="c">#                                            belonging/) as its third element</span>
-<span class="k">def</span> <span class="nf">build_dataset</span><span class="p">(</span> <span class="n">n_patterns</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> 
-                   <span class="n">std_deviation</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
-                   <span class="n">centroids1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.8</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">]</span> <span class="p">],</span> 
-                   <span class="n">centroids2</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span> <span class="p">]</span> <span class="p">]</span> <span class="p">)</span> <span class="p">:</span>
+<span class="c"># Initialize errors</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nl</span> <span class="p">:</span>
+    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+
+<span class="c"># Initialize weights</span>
+<span class="n">w</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">no</span><span class="p">,</span><span class="n">ni</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">nl</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">nl</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">randn</span><span class="p">(</span><span class="n">no</span><span class="p">,</span> <span class="n">ni</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+
+<span class="c">#-------------------------------------------------------------------------</span>
+    <span class="n">c1</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">2</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span> <span class="mi">2</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)])</span> 
+
+<span class="c"># Initialize units history storage</span>
+<span class="n">data_u</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nl</span> <span class="p">:</span>
+    <span class="n">data_u</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">stime</span><span class="p">]))</span>
+
+<span class="c"># Initialize weight history storage</span>
+<span class="n">data_w</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">no</span><span class="p">,</span><span class="n">ni</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">nl</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">nl</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="n">data_w</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zeros</span><span class="p">([(</span><span class="n">no</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ni</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">stime</span><span class="p">]))</span>
+
+<span class="c"># Initialize the error history storage</span>
+<span class="n">E</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">stime</span><span class="p">)</span>
+
+<span class="c">#-------------------------------------------------------------------------</span>
+
+
+<span class="c"># Create a list of pattern indices.</span>
+<span class="c"># We will reshuffle it at each </span>
+<span class="c"># repetition of the series</span>
+<span class="n">pattern_indices</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">stime</span><span class="p">)</span> <span class="p">:</span>
     
-    <span class="c"># Decide to which group patterns are from.</span>
-    <span class="c"># First half belongs to the class</span>
-    <span class="n">categories</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">n_patterns</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">n_patterns</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>   
     
-    <span class="c"># Each row of this array will contain a 2-element-wide </span>
-    <span class="c"># input pattern plus an integer defining to which category</span>
-    <span class="c"># the pattern belongs   </span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">([</span><span class="n">n_patterns</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
-
-    <span class="c"># Iterate the patterns to generate</span>
-    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">n_patterns</span><span class="p">)</span> <span class="p">:</span>
-        
-        <span class="n">pattern</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="n">categories</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">:</span> 
-            <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="n">rand</span><span class="p">()</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">centroids1</span><span class="p">)</span> <span class="p">)</span>
-            <span class="n">pattern</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">centroids1</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
-        <span class="k">else</span> <span class="p">:</span>
-            <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="n">rand</span><span class="p">()</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">centroids2</span><span class="p">)</span> <span class="p">)</span>
-            <span class="n">pattern</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">centroids2</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
-        
-        <span class="c"># Add noise to each element of the centroid</span>
-        <span class="n">pattern</span> <span class="o">+=</span> <span class="n">std_deviation</span><span class="o">*</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-
-        <span class="c"># Fill up data </span>
-        <span class="n">data</span><span class="p">[</span><span class="n">t</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">([</span><span class="n">pattern</span><span class="p">,</span> <span class="n">categories</span><span class="p">[</span><span class="n">t</span><span class="p">]])</span>
+    <span class="c"># Reiterate the input pattern </span>
+    <span class="c"># sequence through timesteps</span>
     
-    <span class="k">return</span> <span class="n">data</span>
+    <span class="c"># Reshuffle at the end </span>
+    <span class="c"># of the series</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">%</span><span class="k">np</span> == 0:
+      <span class="n">shuffle</span><span class="p">(</span><span class="n">pattern_indices</span><span class="p">)</span>
+    
+    <span class="c"># Current pattern </span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">pattern_indices</span><span class="p">[</span><span class="n">t</span><span class="o">%</span><span class="k">np</span>]
+
+
+    <span class="c"># MAIN STEP CALCULATIONS</span>
+
+
+    <span class="c">#---------------------------------------------------------------------</span>
+    <span class="c"># spreading</span>
+ 
+    <span class="c"># input vector</span>
+    <span class="n">p</span> <span class="o">=</span>  <span class="n">P</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    
+    <span class="c"># linear function</span>
+    <span class="n">units</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
+
+    <span class="c"># iterate deep layers</span>
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">num_layers</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span>
+     
+        <span class="c"># Bias-plus-input vector</span>
+        <span class="n">p</span> <span class="o">=</span>  <span class="n">dot</span><span class="p">(</span> <span class="n">w</span><span class="p">[</span><span class="n">layer</span><span class="p">],</span> <span class="n">biased</span><span class="p">(</span><span class="n">units</span><span class="p">[</span><span class="n">layer</span><span class="p">])</span> <span class="p">)</span>
+        
+        <span class="c"># nonlinear function</span>
+        <span class="n">units</span><span class="p">[</span><span class="n">layer</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">outfun</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+     
+
+    <span class="c">#---------------------------------------------------------------------</span>
+    <span class="c"># error back-propagation</span>
+       
+    <span class="c"># the initial outer-error is the real one </span>
+    <span class="c"># (expected vs real outputs)</span>
+    <span class="n">errors</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">o</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">units</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        
+    <span class="c"># iterate layers backward</span>
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span>  <span class="nb">xrange</span><span class="p">(</span><span class="n">num_layers</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span>
+        
+        <span class="c"># for each layer evaluate the </span>
+        <span class="c"># back-propagation error</span>
+        <span class="n">w_T</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="n">layer</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">errors</span><span class="p">[</span><span class="n">layer</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span> <span class="n">w_T</span><span class="p">,</span> <span class="n">errors</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span> <span class="p">)</span>
+ 
+
+    <span class="c">#---------------------------------------------------------------------</span>
+    <span class="c"># Learning</span>
+
+    <span class="c"># iterate layers </span>
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span>  <span class="nb">xrange</span><span class="p">(</span><span class="n">num_layers</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="c"># error plus derivative</span>
+        <span class="n">w</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span> <span class="o">+=</span> <span class="n">eta</span> <span class="o">*</span> <span class="n">outer</span><span class="p">(</span>
+                <span class="n">derfun</span><span class="p">(</span><span class="n">units</span><span class="p">[</span><span class="n">layer</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">errors</span><span class="p">[</span><span class="n">layer</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">biased</span><span class="p">(</span><span class="n">units</span><span class="p">[</span><span class="n">layer</span><span class="p">]))</span>
+
+
+    <span class="c">#---------------------------------------------------------------------</span>
+    <span class="c"># Storage</span>
+
+    <span class="c"># store current units</span>
+    <span class="k">for</span> <span class="n">d</span><span class="p">,</span><span class="n">iu</span>  <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data_u</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span> <span class="p">:</span>
+        <span class="n">d</span><span class="p">[:,</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">iu</span>
+  
+    <span class="c"># Store current weights</span>
+    <span class="k">for</span> <span class="n">d</span><span class="p">,</span><span class="n">iw</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data_w</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="p">:</span>
+        <span class="n">d</span><span class="p">[:,</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">iw</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+    <span class="c"># Store current E</span>
+    <span class="n">E</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">errors</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+
+
+
+
+
+<span class="n">Z</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">upper_bound</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">upper_bound</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">XX</span><span class="p">,</span> <span class="n">YY</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">y</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span> <span class="p">:</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span> <span class="p">:</span>
+        
+        <span class="n">units</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">])</span>
+
+        <span class="c"># iterate deep layers</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">num_layers</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span>
+
+            <span class="c"># Bias-plus-input vector</span>
+            <span class="n">p</span> <span class="o">=</span>  <span class="n">dot</span><span class="p">(</span> <span class="n">w</span><span class="p">[</span><span class="n">layer</span><span class="p">],</span> <span class="n">biased</span><span class="p">(</span><span class="n">units</span><span class="p">[</span><span class="n">layer</span><span class="p">])</span> <span class="p">)</span>
+
+            <span class="c"># nonlinear function</span>
+            <span class="n">units</span><span class="p">[</span><span class="n">layer</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">outfun</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="n">Z</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="n">num_layers</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+  
 </pre></div>
 
 </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="n">close</span><span class="p">(</span><span class="s">&quot;all&quot;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">XX</span><span class="p">,</span><span class="n">YY</span><span class="p">,</span><span class="o">-</span><span class="n">Z</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">coolwarm</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">P</span><span class="p">[</span><span class="n">o</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">&quot;r&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">P</span><span class="p">[</span><span class="n">o</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">&quot;b&quot;</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
+<span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+AABJRU5ErkJggg==
+"
+>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -413,7 +734,7 @@ Next cell is just for styling</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
@@ -431,7 +752,7 @@ Next cell is just for styling</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[7]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[47]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <style>
