@@ -212,7 +212,7 @@ $$
 net = \mathbf{w}^T\mathbf{x}
 $$</p>
 <p>where $\mathbf{w}^T$ is the vector  $\mathbf{w} = (w_0, \dots, w_{n+1})$ translated into a row vector and $\mathbf{w}^T\mathbf{x}$ is the <a href="https://en.wikipedia.org/wiki/Dot_product#Algebraic_definition">dot product</a>, a linear algebra operator that allows to calculate the  weighted sum at once.</p>
-<blockquote><p>Given two vectors of the same size $\mathbf{a} \in \mathbb{R}^n$ and $\mathbf{b} \in \mathbb{R}^n$, the dot product $\mathbf{a}^T\mathbf{b}$ produces a <em>scalar value</em>.</p>
+<blockquote><p>Given two vectors of the same size $\mathbf{a} \in \mathbb{R}^n$ and $\mathbf{b} \in \mathbb{R}^n$, the dot product $\mathbf{a}^T\mathbf{b}$ produces  the <em>scalar value</em> $a_0 b_0 + \dots +a_n b_n$.</p>
 </blockquote>
 <p>In python you write:</p>
 <div class="highlight"><pre><span class="c">#The first unit is a bias unit</span>
@@ -259,7 +259,14 @@ $$
 \mathbf{net} = \mathbf{W}\mathbf{x}
 $$
 where $ \mathbf{net} = (y_0, \dots, y_m)$ is the vector of weighted sums, $\mathbf{W} \in \mathbb{R}^{m\times n}$  is the matrix of weights from $ \mathbf{x}$ to $ \mathbf{y}$, and $\mathbf{W}\mathbf{x}$ is a multiplication of a matrix  times a vector, that is the <a href="https://en.wikipedia.org/wiki/Matrix_multiplication#Matrix_product_.28two_matrices.29">matrix product</a> of which the dot product is a <a href="https://en.wikipedia.org/wiki/Matrix_multiplication#Row_vector_and_column_vector">special case</a>.</p>
-<blockquote><p>Given two matrices $\mathbf{A} \in \mathbb{R}^{m\times k}$ and $\mathbf{B} \in \mathbb{R}^{k\times n}$, the matrix product $\mathbf{A}\mathbf{B}$ produces a new matrix $\mathbf{P} \in \mathbb{R}^{m\times n}$.</p>
+<blockquote><p>Given two matrices $\mathbf{A} \in \mathbb{R}^{m\times k}$ and $\mathbf{B} \in \mathbb{R}^{k\times n}$, the matrix product $\mathbf{A}\mathbf{B}$ produces a new matrix $\mathbf{P} \in \mathbb{R}^{m\times n}$:
+$$
+    \begin{bmatrix}
+    \mathbf{a}^T_{row_0}\mathbf{b}_{col_0} &\dots& \mathbf{a}^T_{row_0}\mathbf{b}_{col_n} \\
+    \vdots &\ddots &\vdots \\ 
+    \mathbf{a}^T_{row_m}\mathbf{b}_{col_0} &\dots& \mathbf{a}^T_{row_m}\mathbf{b}_{col_n} 
+    \end{bmatrix}\
+$$</p>
 </blockquote>
 <p>Magically, in pylab there is almost no change!:</p>
 <div class="highlight"><pre><span class="c"># Evalutate the weighted sum - dot product</span>
@@ -300,7 +307,14 @@ which in linear algebra notation is:</p>
 $$
 \Delta \mathbf{W} = \eta (\mathbf{o}_k - \mathbf{y})\mathbf{x}^T
 $$<p>where $\mathbf{o}_k - \mathbf{y}$ is now a vector, $\mathbf{x}^T$ is the vector $\mathbf{x}$ <em>transposed into a row vector</em>, and $(\mathbf{o}_k - \mathbf{y})\mathbf{x}^T$ is a new form of vector product: the <a href="https://en.wikipedia.org/wiki/Outer_product#Vector_multiplication">outer product</a>.</p>
-<blockquote><p>Given two vectors $\mathbf{a} \in \mathbb{R}^n$ and $\mathbf{b} \in \mathbb{R}^m$, the outer product $\mathbf{a}\mathbf{b}^T$ produces a matrix $\mathbf{M} \in \mathbb{R}^{m\times n}$.</p>
+<blockquote><p>Given two vectors $\mathbf{a} \in \mathbb{R}^m$ and $\mathbf{b} \in \mathbb{R}^n$, the outer product $\mathbf{a}\mathbf{b}^T$ produces a matrix $\mathbf{M} \in \mathbb{R}^{m\times n}$:
+$$
+\begin{bmatrix}
+    a_{0} b_{0} & \dots & a_{0} b_{n} \\
+    \vdots & \ddots & \vdots \\
+    a_{m} b_{0} & \dots & a_{m} b_{n}
+\end{bmatrix}
+$$</p>
 </blockquote>
 <p>In python we can rewrite it as:</p>
 <div class="highlight"><pre><span class="n">W</span> <span class="o">+=</span> <span class="n">eta</span><span class="o">*</span><span class="n">outer</span><span class="p">((</span><span class="n">o</span> <span class="o">-</span> <span class="n">y</span><span class="p">),</span> <span class="n">tx</span><span class="p">)</span>
@@ -361,7 +375,7 @@ The next cell is just for styling</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
@@ -379,7 +393,7 @@ The next cell is just for styling</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[3]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[1]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <style>

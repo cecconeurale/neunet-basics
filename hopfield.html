@@ -240,8 +240,10 @@ $$<p></p>
 $$
 \mathbf{x} = sgn(\mathbf{W}\mathbf{x})
 $$
-where $\mathbf{x}$ is the vector of activations, $\mathbf{W}$ is the matrix of inner weights and $\mathbf{W}\mathbf{x}$ is the <a href="https://en.wikipedia.org/wiki/Dot_product#Algebraic_definition">dot product</a>, a linear algebra operator that allows to calculate the  weighted sum at once. 
-Linear algebra notation is a far better way to implement neural networks in a program than iterating units. In particular, writing formulas with linear algebra notation in python (through the numpy library) improves both speed and readability. In the case of units activations in python you can write:</p>
+where $\mathbf{x}$ is the vector of activations, $\mathbf{W}$ is the matrix of inner weights and $\mathbf{W}\mathbf{x}$ is the <a href="https://en.wikipedia.org/wiki/Dot_product#Algebraic_definition">dot product</a>, a linear algebra operator that allows to calculate the  weighted sum at once.</p>
+<blockquote><p>Given two vectors of the same size $\mathbf{a} \in \mathbb{R}^n$ and $\mathbf{b} \in \mathbb{R}^n$, the dot product $\mathbf{a}^T\mathbf{b}$ produces  the <em>scalar value</em> $a_0 b_0 + \dots +a_n b_n$.</p>
+</blockquote>
+<p>Linear algebra notation is a far better way to implement neural networks in a program than iterating units. In particular, writing formulas with linear algebra notation in python (through the numpy library) improves both speed and readability. In the case of units activations in python you can write:</p>
 <div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="n">sgn</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">x</span><span class="p">))</span>
 </pre></div>
 <p><em>Using linear algebra in a neural network implementation is far simpler than writing loops, it is less error prone and also produces a much efficient code in terms of speed!!</em></p>
@@ -279,7 +281,17 @@ In python we can write:</p>
 $$
     \mathbf{W} = \frac{1}{n_p}\sum_k \mathbf{p}_k \mathbf{p}_k^T
 $$
-Where  $ \mathbf{p}_k \mathbf{p}_k^T$ is the <a href="https://en.wikipedia.org/wiki/Outer_product#Definition_.28matrix_multiplication.29">outer product</a> of $\mathbf{p}_k$ with itself. In python it becomes:</p>
+Where  $ \mathbf{p}_k \mathbf{p}_k^T$ is the <a href="https://en.wikipedia.org/wiki/Outer_product#Definition_.28matrix_multiplication.29">outer product</a> of $\mathbf{p}_k$ with itself.</p>
+<blockquote><p>Given two vectors $\mathbf{a} \in \mathbb{R}^m$ and $\mathbf{b} \in \mathbb{R}^n$, the outer product $\mathbf{a}\mathbf{b}^T$ produces a matrix $\mathbf{M} \in \mathbb{R}^{m\times n}$:
+$$
+\begin{bmatrix}
+    a_{0} b_{0} & \dots & a_{0} b_{n} \\
+    \vdots & \ddots & \vdots \\
+    a_{m} b_{0} & \dots & a_{m} b_{n}
+\end{bmatrix}
+$$</p>
+</blockquote>
+<p>In python it becomes:</p>
 <div class="highlight"><pre><span class="c"># accumulate dot products</span>
 <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">P</span><span class="p">:</span>
     <span class="n">w</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="p">))</span><span class="o">*</span><span class="n">outer</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
